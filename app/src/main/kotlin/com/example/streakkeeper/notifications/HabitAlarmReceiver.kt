@@ -29,6 +29,21 @@ class HabitAlarmReceiver : BroadcastReceiver() {
         const val TYPE_PRE_REMINDER = "TYPE_PRE_REMINDER"
         const val TYPE_ON_TIME = "TYPE_ON_TIME"
         const val TYPE_EVENING_SHIELD = "TYPE_EVENING_SHIELD"
+
+        fun createNotificationChannel(context: Context) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager ?: return
+                val channel = NotificationChannel(
+                    CHANNEL_ID,
+                    CHANNEL_NAME,
+                    NotificationManager.IMPORTANCE_HIGH
+                ).apply {
+                    description = "100% Offline Local Reminders for Streaks and Habits"
+                    enableVibration(true)
+                }
+                notificationManager.createNotificationChannel(channel)
+            }
+        }
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -38,11 +53,11 @@ class HabitAlarmReceiver : BroadcastReceiver() {
             return
         }
 
+        createNotificationChannel(context)
         val habitTitle = intent.getStringExtra(EXTRA_HABIT_TITLE) ?: "Your Habit"
         val notifType = intent.getStringExtra(EXTRA_NOTIFICATION_TYPE) ?: TYPE_ON_TIME
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        createNotificationChannel(notificationManager)
 
         val openIntent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -81,19 +96,5 @@ class HabitAlarmReceiver : BroadcastReceiver() {
 
         val notifId = (habitTitle.hashCode() + notifType.hashCode()).let { if (it < 0) -it else it }
         notificationManager.notify(notifId, notification)
-    }
-
-    private fun createNotificationChannel(notificationManager: NotificationManager) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CHANNEL_ID,
-                CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_HIGH
-            ).apply {
-                description = "100% Offline Local Reminders for Streaks and Habits"
-                enableVibration(true)
-            }
-            notificationManager.createNotificationChannel(channel)
-        }
     }
 }

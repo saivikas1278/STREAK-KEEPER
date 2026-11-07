@@ -1,23 +1,30 @@
 package com.example.streakkeeper
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
-import androidx.compose.ui.platform.LocalContext
 import com.example.streakkeeper.data.HabitStorageManager
+import com.example.streakkeeper.notifications.HabitAlarmReceiver
+import com.example.streakkeeper.notifications.HabitNotificationScheduler
 import com.example.streakkeeper.ui.habit.CreateHabitScreen
 import com.example.streakkeeper.ui.habit.HabitDedicatedScreen
 import com.example.streakkeeper.ui.habit.HabitItem
 import com.example.streakkeeper.ui.home.HomeScreen
 import com.example.streakkeeper.ui.main.MainScreen
 import com.example.streakkeeper.ui.onboarding.AccountSetupScreen
-import com.example.streakkeeper.notifications.HabitNotificationScheduler
 import com.example.streakkeeper.ui.splash.SplashScreen
 
 @Composable
@@ -28,7 +35,23 @@ fun MainNavigation() {
   val backStack = rememberNavBackStack(initialKey)
   var habitsList by remember { mutableStateOf(HabitStorageManager.loadHabits(context)) }
 
+  val notificationPermissionLauncher = rememberLauncherForActivityResult(
+    contract = ActivityResultContracts.RequestPermission(),
+    onResult = { isGranted ->
+      HabitAlarmReceiver.createNotificationChannel(context)
+      if (isGranted) {
+        HabitNotificationScheduler.rescheduleAll(context, habitsList)
+      }
+    }
+  )
+
   androidx.compose.runtime.LaunchedEffect(Unit) {
+    HabitAlarmReceiver.createNotificationChannel(context)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+        notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+      }
+    }
     HabitNotificationScheduler.rescheduleAll(context, habitsList)
   }
 
