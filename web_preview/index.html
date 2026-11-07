@@ -1,0 +1,2990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>StreakKeeper — Swiss Dark Minimalism</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body, html {
+      background-color: #090909;
+      color: #F5F5F5;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      user-select: none;
+    }
+    .font-bebas {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 0.08em;
+    }
+    .font-tinos {
+      font-family: 'Tinos', serif;
+    }
+    .font-inter {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .screen-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem;
+      transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .zooming-in {
+      transform: scale(22) !important;
+      opacity: 0 !important;
+      transition: transform 0.65s cubic-bezier(0.7, 0, 0.2, 1), opacity 0.55s ease-in !important;
+    }
+    @keyframes flameDance {
+      0%, 100% {
+        transform: scale(1) rotate(-1deg);
+        filter: drop-shadow(0 0 6px rgba(229, 185, 107, 0.45));
+      }
+      25% {
+        transform: scale(1.08, 0.94) rotate(1.5deg);
+        filter: drop-shadow(0 0 10px rgba(229, 185, 107, 0.75));
+      }
+      50% {
+        transform: scale(0.96, 1.05) rotate(-2deg);
+        filter: drop-shadow(0 0 8px rgba(229, 185, 107, 0.55));
+      }
+      75% {
+        transform: scale(1.04, 0.98) rotate(1deg);
+        filter: drop-shadow(0 0 12px rgba(229, 185, 107, 0.8));
+      }
+    }
+    .animate-flame {
+      animation: flameDance 2.4s ease-in-out infinite;
+      transform-origin: center bottom;
+    }
+    @keyframes flamePop {
+      0% { transform: scale(0.92); opacity: 0.8; }
+      50% { transform: scale(1.18); filter: drop-shadow(0 0 10px rgba(229, 185, 107, 0.7)); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .flame-pop {
+      animation: flamePop 0.42s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    /* Sleek custom scrollbars & smooth touch physics */
+    .custom-scroll {
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      overscroll-behavior-y: contain;
+      scrollbar-width: thin;
+      scrollbar-color: #292929 transparent;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background-color: #292929;
+      border-radius: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background-color: #86C99A;
+    }
+  </style>
+</head>
+<body class="w-screen h-screen bg-[#090909] font-inter relative overflow-hidden">
+
+  <!-- ============================================================== -->
+  <!-- SCREEN 1: SPLASH SCREEN                                        -->
+  <!-- ============================================================== -->
+  <div id="splashScreen" class="screen-container z-30">
+    <div class="w-full pt-2"></div>
+
+    <main class="flex-1 flex flex-col items-center justify-center relative z-10 w-full max-w-sm -mt-2">
+      <div id="logoContainer" class="relative z-10 transition-transform duration-500 ease-out origin-[50%_34%]">
+        <canvas id="mindCanvas" width="280" height="280"></canvas>
+      </div>
+
+      <div id="typographyBlock" class="mt-4 flex flex-col items-center text-center transition-all duration-300 ease-out">
+        <h1 class="font-bebas text-4xl sm:text-5xl text-[#F5F5F5] uppercase leading-none tracking-[0.06em]">STREAKKEEPER</h1>
+        <p class="font-tinos italic text-[17px] text-[#A0A0A0] mt-2.5 tracking-normal">Consistency over perfection.</p>
+      </div>
+    </main>
+
+    <footer id="splashFooter" class="w-full max-w-xs flex flex-col items-center pb-8 z-20 transition-all duration-300">
+      <button id="makeItBtn" class="w-full py-3.5 px-6 rounded-[14px] bg-[#F5F5F5] hover:bg-white text-[#090909] font-inter font-semibold text-[14px] tracking-[0.02em] active:scale-[0.98] transition-all duration-150 flex items-center justify-center gap-2 border border-[#F5F5F5]">
+        <span>LET'S MAKE IT</span>
+        <svg class="w-4 h-4 text-[#090909]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+        </svg>
+      </button>
+    </footer>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- SCREEN 2: ACCOUNT SETUP (NAME & PASSWORD)                      -->
+  <!-- ============================================================== -->
+  <div id="accountScreen" class="screen-container z-20 opacity-0 pointer-events-none translate-y-4">
+    <header class="w-full max-w-sm flex items-center justify-between pt-2">
+      <button id="backToSplashBtn" class="w-9 h-9 rounded-xl bg-[#141414] border border-[#292929] text-[#A0A0A0] hover:text-[#F5F5F5] flex items-center justify-center transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+      </button>
+      <span class="text-[11px] font-semibold tracking-[0.14em] uppercase text-[#737373]">01 / 02 — IDENTITY</span>
+      <div class="w-9"></div>
+    </header>
+
+    <main class="w-full max-w-sm flex-1 flex flex-col justify-center gap-3.5 my-4">
+      <div class="mb-1">
+        <h2 class="font-bebas text-3xl sm:text-4xl text-[#F5F5F5] tracking-[0.04em] uppercase leading-none">CREATE YOUR PROFILE</h2>
+        <p class="font-tinos italic text-[15px] text-[#A0A0A0] mt-1.5">Secure your private daily consistency journey.</p>
+      </div>
+
+      <!-- Bento Card 1: Name Input -->
+      <div class="bg-[#141414] border border-[#292929] rounded-[18px] p-4 flex flex-col gap-2">
+        <label for="userName" class="text-[11px] font-semibold tracking-[0.08em] uppercase text-[#737373] flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-[#A0A0A0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+          YOUR NAME
+        </label>
+        <input 
+          type="text" 
+          id="userName" 
+          placeholder="e.g. Alex Vance" 
+          class="w-full bg-[#1B1B1B] border border-[#292929] rounded-xl px-3.5 py-2.5 text-sm text-[#F5F5F5] placeholder-[#505050] focus:outline-none focus:border-[#F5F5F5] transition-colors"
+        />
+      </div>
+
+      <!-- Bento Card 2: Password Input & Strength Meter -->
+      <div class="bg-[#141414] border border-[#292929] rounded-[18px] p-4 flex flex-col gap-2.5">
+        <div class="flex items-center justify-between">
+          <label for="userPassword" class="text-[11px] font-semibold tracking-[0.08em] uppercase text-[#737373] flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-[#A0A0A0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            MASTER PASSCODE
+          </label>
+          <span id="strengthLabel" class="text-[11px] font-medium text-[#737373]">Minimum 6 characters</span>
+        </div>
+
+        <div class="relative w-full">
+          <input 
+            type="password" 
+            id="userPassword" 
+            placeholder="Create password" 
+            class="w-full bg-[#1B1B1B] border border-[#292929] rounded-xl px-3.5 py-2.5 pr-10 text-sm text-[#F5F5F5] placeholder-[#505050] focus:outline-none focus:border-[#F5F5F5] transition-colors"
+          />
+          <button id="togglePasswordBtn" type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#737373] hover:text-[#F5F5F5]">
+            <svg id="eyeIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-4 gap-1.5 pt-1">
+          <div id="bar1" class="h-1 rounded-full bg-[#292929] transition-all"></div>
+          <div id="bar2" class="h-1 rounded-full bg-[#292929] transition-all"></div>
+          <div id="bar3" class="h-1 rounded-full bg-[#292929] transition-all"></div>
+          <div id="bar4" class="h-1 rounded-full bg-[#292929] transition-all"></div>
+        </div>
+      </div>
+
+      <!-- Bento Card 3: Security & Encryption Guarantee -->
+      <div class="bg-[#101010] border border-[#202020] rounded-[16px] p-3 flex items-center gap-3">
+        <div class="w-7 h-7 rounded-lg bg-[#1B1B1B] border border-[#292929] flex items-center justify-center text-[#E5B96B]">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </div>
+        <p class="text-[12px] text-[#A0A0A0] leading-snug">
+          Offline vault. Your password encrypts your local habit database on this device.
+        </p>
+      </div>
+    </main>
+
+    <footer class="w-full max-w-sm flex flex-col items-center pb-8 z-20">
+      <button id="continueBtn" class="w-full py-3.5 px-6 rounded-[14px] bg-[#F5F5F5] hover:bg-white text-[#090909] font-inter font-semibold text-[14px] tracking-[0.02em] active:scale-[0.98] transition-all duration-150 flex items-center justify-center gap-2 border border-[#F5F5F5]">
+        <span>CONTINUE TO ROUTINE</span>
+        <svg class="w-4 h-4 text-[#090909]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+        </svg>
+      </button>
+    </footer>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- SCREEN 3: HOME DASHBOARD (CENTER PLUS ICON & 2-ITEM BOTTOM BAR) -->
+  <!-- ============================================================== -->
+  <div id="homeScreen" class="screen-container z-10 opacity-0 pointer-events-none translate-y-4">
+    
+    <!-- Top Minimalist Bar (Dynamically adapts between Routine and Profile) -->
+    <header class="w-full max-w-sm flex items-center justify-between pt-2 flex-shrink-0">
+      <div class="flex flex-col">
+        <span id="homeSubHeader" class="text-[11px] font-semibold tracking-[0.14em] uppercase text-[#737373]">DAILY CONSISTENCY</span>
+        <h2 id="homeGreeting" class="font-bebas text-2xl text-[#F5F5F5] tracking-[0.04em] uppercase leading-tight mt-0.5">ROUTINE OVERVIEW</h2>
+      </div>
+
+      <!-- Actionable Header Badges Container -->
+      <div class="flex items-center gap-1.5">
+        <!-- Unambiguous Today's Routine Progress Badge -->
+        <div id="todayProgressBadge" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#141414] border border-[#292929] shadow-[0_2px_12px_rgba(0,0,0,0.6)]">
+          <span id="todayProgressDot" class="w-1.5 h-1.5 rounded-full bg-[#E5B96B]"></span>
+          <span id="todayProgressText" class="text-[10px] font-bold text-[#F5F5F5] tracking-wider uppercase font-sans">0 / 0 DONE</span>
+        </div>
+
+        <!-- Private Profile Badge (Visible in Profile Tab) -->
+        <div id="privateProfileBadge" class="hidden items-center gap-2 px-3 py-1.5 rounded-full bg-[#161a17] border border-[#86C99A]/30 shadow-[0_2px_12px_rgba(0,0,0,0.6)]">
+          <span class="w-2 h-2 rounded-full bg-[#86C99A] animate-pulse"></span>
+          <span class="text-[10px] font-bold text-[#86C99A] uppercase tracking-wider">100% PRIVATE</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Center Screen Area: Prominent PLUS (+) Button OR Active Habits List -->
+    <main id="homeMainContent" class="w-full max-w-sm flex-1 min-h-0 flex flex-col items-center relative my-1 overflow-hidden">
+      
+      <!-- State A: Empty Habit View (Central Plus Action) -->
+      <div id="emptyHabitView" class="w-full flex-1 flex flex-col items-center justify-center text-center gap-5">
+        
+        <!-- Large Interactive Center Plus (+) Button -->
+        <button id="centerPlusBtn" class="w-20 h-20 rounded-2xl bg-[#141414] hover:bg-[#1B1B1B] border border-[#292929] hover:border-[#F5F5F5] text-[#F5F5F5] flex items-center justify-center shadow-[0_8px_30px_rgba(0,0,0,0.8)] active:scale-95 transition-all duration-200 group">
+          <svg class="w-8 h-8 text-[#F5F5F5] group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 4v16m8-8H4"/>
+          </svg>
+        </button>
+
+        <!-- Descriptive Swiss Typography -->
+        <div class="flex flex-col items-center">
+          <h3 class="font-bebas text-2xl text-[#F5F5F5] tracking-wide uppercase">ADD YOUR FIRST HABIT</h3>
+          <p class="font-tinos italic text-[14px] text-[#A0A0A0] mt-1 max-w-[220px]">
+            Tap the center plus button to start building an unbroken streak.
+          </p>
+        </div>
+      </div>
+
+      <!-- State B: Active Habits List View (Shown once habits are added) -->
+      <div id="habitsListView" class="w-full h-full min-h-0 hidden flex-col gap-3 flex-1 overflow-y-auto custom-scroll pb-16">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-[11px] font-semibold tracking-[0.12em] uppercase text-[#737373]">ACTIVE DISCIPLINES</span>
+          <button id="addAnotherHabitBtn" class="px-2.5 py-1 rounded-lg bg-[#141414] border border-[#292929] hover:border-[#F5F5F5] text-[#F5F5F5] text-[11px] font-bold flex items-center gap-1 transition-colors">
+            <span>+</span> NEW HABIT
+          </button>
+        </div>
+        <div id="habitsContainer" class="flex flex-col gap-2.5 w-full"></div>
+      </div>
+
+      <!-- State C: Profile & Analytics Dossier View (Clean, Uncluttered, Scroll-Safe) -->
+      <div id="profileViewContainer" class="w-full h-full min-h-0 hidden flex-col gap-3.5 flex-1 overflow-y-auto custom-scroll pt-1 pb-36">
+        
+        <!-- HERO BENTO 1: Profile Identity & Circular Animated Consistency Gauge -->
+        <div class="bg-[#141414] border border-[#292929] rounded-[22px] p-4 flex items-center justify-between relative overflow-hidden shrink-0">
+          <div class="flex flex-col gap-1 z-10">
+            <div class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-[#86C99A] animate-pulse"></span>
+              <span class="text-[10px] font-bold tracking-widest uppercase text-[#737373]">VAULT MASTER • 100% OFFLINE</span>
+            </div>
+            <h2 id="profileDisplayName" class="font-bebas text-3xl sm:text-4xl text-[#F5F5F5] tracking-wide uppercase leading-none">VIKAS</h2>
+            <div class="flex items-center gap-2 mt-1">
+              <span id="consistencyTierBadge" class="text-[10px] font-bold text-[#E5B96B] uppercase px-2 py-0.5 rounded bg-[#1f1a12] border border-[#E5B96B]/30">BUILDING HABIT</span>
+            </div>
+            <button id="resetProfileBtn" type="button" class="mt-2 text-left text-[10px] font-semibold text-[#737373] hover:text-[#E47777] uppercase tracking-wider transition-colors flex items-center gap-1">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+              LOG OUT / RESET
+            </button>
+          </div>
+
+          <!-- Circular SVG Radial Progress Meter -->
+          <div class="relative flex items-center justify-center w-24 h-24 shrink-0">
+            <svg class="w-24 h-24 transform -rotate-90" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="40" stroke="#1F1F1F" stroke-width="8" fill="transparent" />
+              <circle id="radialProgressCircle" cx="50" cy="50" r="40" stroke="#86C99A" stroke-width="8" stroke-linecap="round" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="60" class="transition-all duration-1000 ease-out" />
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span id="radialScoreText" class="font-bebas text-2xl text-[#F5F5F5] leading-none">0%</span>
+              <span class="text-[8px] font-bold tracking-wider text-[#737373] uppercase">SCORE</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- BENTO 2: Core 4 Metrics Grid -->
+        <div class="grid grid-cols-2 gap-2 shrink-0">
+          <div class="bg-[#141414] border border-[#292929] rounded-[18px] p-3 flex flex-col gap-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[9px] font-bold tracking-wider text-[#737373] uppercase">ACTIVE HABITS</span>
+              <svg class="w-3.5 h-3.5 text-[#A0A0A0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            </div>
+            <div class="flex items-baseline gap-1">
+              <span id="metricActiveHabits" class="font-bebas text-2xl text-[#F5F5F5] leading-none">0</span>
+              <span class="text-[9px] font-bold text-[#737373]">DISCIPLINES</span>
+            </div>
+            <span class="text-[9px] text-[#505050]">Tracking regularly</span>
+          </div>
+
+          <div class="bg-[#141414] border border-[#292929] rounded-[18px] p-3 flex flex-col gap-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[9px] font-bold tracking-wider text-[#737373] uppercase">BEST STREAK</span>
+              <svg class="w-3.5 h-3.5 text-[#E5B96B]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2c-.3 1.5-1.2 2.7-2.2 3.8C8.5 7.1 7.2 8.6 7 10.7c-.3 2.5 1 4.8 3.1 5.8-1-.5-1.7-1.4-1.9-2.5-.2-1.2.3-2.3 1-3.2.2 1.3.8 2.3 1.8 3 .9.7 1.8 1.6 2 2.8.2 1.1-.2 2.2-1 3 2.1-.5 3.8-2 4.4-4 .8-2.6-.2-5.4-2.2-7-1.1-.9-1.9-2-2.2-3.6z"/></svg>
+            </div>
+            <div class="flex items-baseline gap-1">
+              <span id="metricBestStreak" class="font-bebas text-2xl text-[#E5B96B] leading-none">0</span>
+              <span class="text-[9px] font-bold text-[#737373]">DAYS</span>
+            </div>
+            <span class="text-[9px] text-[#505050]">Longest unbroken</span>
+          </div>
+
+          <div class="bg-[#141414] border border-[#292929] rounded-[18px] p-3 flex flex-col gap-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[9px] font-bold tracking-wider text-[#737373] uppercase">DAYS LOGGED</span>
+              <svg class="w-3.5 h-3.5 text-[#86C99A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <div class="flex items-baseline gap-1">
+              <span id="metricTotalCheckins" class="font-bebas text-2xl text-[#86C99A] leading-none">0</span>
+              <span class="text-[9px] font-bold text-[#737373]">TOTAL</span>
+            </div>
+            <span class="text-[9px] text-[#505050]">Completed check-ins</span>
+          </div>
+
+          <div class="bg-[#141414] border border-[#292929] rounded-[18px] p-3 flex flex-col gap-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[9px] font-bold tracking-wider text-[#737373] uppercase">CONSISTENCY</span>
+              <svg class="w-3.5 h-3.5 text-[#F5F5F5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+            </div>
+            <div class="flex items-baseline gap-1">
+              <span id="metricMonthlyRate" class="font-bebas text-2xl text-[#F5F5F5] leading-none">0%</span>
+              <span class="text-[9px] font-bold text-[#737373]">MONTH</span>
+            </div>
+            <span class="text-[9px] text-[#505050]">Avg completion</span>
+          </div>
+        </div>
+
+        <!-- BENTO 3: My Tracked Disciplines (Habits List with 12-Month Dossier Trigger) -->
+        <div class="bg-[#141414] border border-[#292929] rounded-[22px] p-4 flex flex-col gap-3 shrink-0">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#86C99A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+              <span class="text-[10px] font-bold tracking-wider text-[#737373] uppercase">MY TRACKED DISCIPLINES</span>
+            </div>
+            <span id="profileHabitsCountBadge" class="text-[9px] font-bold text-[#86C99A] uppercase px-2 py-0.5 rounded bg-[#161a17] border border-[#86C99A]/30">0 DISCIPLINES</span>
+          </div>
+
+          <p class="text-[11px] text-[#A0A0A0] leading-snug">
+            Tap any habit below to inspect its full 12-Month Year-at-a-Glance contribution sheet.
+          </p>
+
+          <!-- Dynamic List of User Habits in Profile -->
+          <div id="profileHabitsListContainer" class="flex flex-col gap-2.5">
+            <!-- Dynamically populated via renderProfileHabits() -->
+          </div>
+        </div>
+
+        <!-- BENTO 4: Weekly Consistency Rhythm (Animated 7-Day Bar Chart M T W T F S S) -->
+        <div class="bg-[#141414] border border-[#292929] rounded-[20px] p-4 flex flex-col gap-3 shrink-0">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-[#86C99A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+              <span class="text-[10px] font-bold tracking-wider text-[#737373] uppercase">WEEKLY CONSISTENCY RHYTHM</span>
+            </div>
+            <span id="peakDayBadge" class="text-[9px] font-bold text-[#86C99A] uppercase px-1.5 py-0.5 rounded bg-[#161a17] border border-[#86C99A]/30">PEAK: FRIDAY</span>
+          </div>
+
+          <!-- 7-Column Bar Chart -->
+          <div class="grid grid-cols-7 gap-2 items-end h-24 pt-2 pb-1 border-b border-[#202020]">
+            <!-- Mon -->
+            <div class="flex flex-col items-center gap-1.5 h-full justify-end group cursor-pointer">
+              <span id="valMon" class="text-[8px] font-bold text-[#737373] opacity-0 group-hover:opacity-100 transition-opacity">0</span>
+              <div class="w-full bg-[#1B1B1B] rounded-t-md h-full flex items-end">
+                <div id="barMon" style="height: 15%;" class="w-full bg-[#86C99A] rounded-t-md transition-all duration-700 ease-out group-hover:brightness-125"></div>
+              </div>
+              <span class="text-[9px] font-bold text-[#737373]">M</span>
+            </div>
+            <!-- Tue -->
+            <div class="flex flex-col items-center gap-1.5 h-full justify-end group cursor-pointer">
+              <span id="valTue" class="text-[8px] font-bold text-[#737373] opacity-0 group-hover:opacity-100 transition-opacity">0</span>
+              <div class="w-full bg-[#1B1B1B] rounded-t-md h-full flex items-end">
+                <div id="barTue" style="height: 25%;" class="w-full bg-[#86C99A] rounded-t-md transition-all duration-700 ease-out group-hover:brightness-125"></div>
+              </div>
+              <span class="text-[9px] font-bold text-[#737373]">T</span>
+            </div>
+            <!-- Wed -->
+            <div class="flex flex-col items-center gap-1.5 h-full justify-end group cursor-pointer">
+              <span id="valWed" class="text-[8px] font-bold text-[#737373] opacity-0 group-hover:opacity-100 transition-opacity">0</span>
+              <div class="w-full bg-[#1B1B1B] rounded-t-md h-full flex items-end">
+                <div id="barWed" style="height: 40%;" class="w-full bg-[#86C99A] rounded-t-md transition-all duration-700 ease-out group-hover:brightness-125"></div>
+              </div>
+              <span class="text-[9px] font-bold text-[#737373]">W</span>
+            </div>
+            <!-- Thu -->
+            <div class="flex flex-col items-center gap-1.5 h-full justify-end group cursor-pointer">
+              <span id="valThu" class="text-[8px] font-bold text-[#737373] opacity-0 group-hover:opacity-100 transition-opacity">0</span>
+              <div class="w-full bg-[#1B1B1B] rounded-t-md h-full flex items-end">
+                <div id="barThu" style="height: 30%;" class="w-full bg-[#86C99A] rounded-t-md transition-all duration-700 ease-out group-hover:brightness-125"></div>
+              </div>
+              <span class="text-[9px] font-bold text-[#737373]">T</span>
+            </div>
+            <!-- Fri -->
+            <div class="flex flex-col items-center gap-1.5 h-full justify-end group cursor-pointer">
+              <span id="valFri" class="text-[8px] font-bold text-[#737373] opacity-0 group-hover:opacity-100 transition-opacity">0</span>
+              <div class="w-full bg-[#1B1B1B] rounded-t-md h-full flex items-end">
+                <div id="barFri" style="height: 70%;" class="w-full bg-[#86C99A] rounded-t-md transition-all duration-700 ease-out group-hover:brightness-125"></div>
+              </div>
+              <span class="text-[9px] font-bold text-[#737373]">F</span>
+            </div>
+            <!-- Sat -->
+            <div class="flex flex-col items-center gap-1.5 h-full justify-end group cursor-pointer">
+              <span id="valSat" class="text-[8px] font-bold text-[#737373] opacity-0 group-hover:opacity-100 transition-opacity">0</span>
+              <div class="w-full bg-[#1B1B1B] rounded-t-md h-full flex items-end">
+                <div id="barSat" style="height: 20%;" class="w-full bg-[#86C99A] rounded-t-md transition-all duration-700 ease-out group-hover:brightness-125"></div>
+              </div>
+              <span class="text-[9px] font-bold text-[#737373]">S</span>
+            </div>
+            <!-- Sun -->
+            <div class="flex flex-col items-center gap-1.5 h-full justify-end group cursor-pointer">
+              <span id="valSun" class="text-[8px] font-bold text-[#737373] opacity-0 group-hover:opacity-100 transition-opacity">0</span>
+              <div class="w-full bg-[#1B1B1B] rounded-t-md h-full flex items-end">
+                <div id="barSun" style="height: 10%;" class="w-full bg-[#86C99A] rounded-t-md transition-all duration-700 ease-out group-hover:brightness-125"></div>
+              </div>
+              <span class="text-[9px] font-bold text-[#737373]">S</span>
+            </div>
+          </div>
+          <span class="text-[10px] text-[#737373] text-center">Day-by-day distribution across November</span>
+        </div>
+
+        <!-- BENTO 5: Time-of-Day Distribution (Schedule Spectrum) -->
+        <div class="bg-[#141414] border border-[#292929] rounded-[20px] p-4 flex flex-col gap-3 shrink-0">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-bold tracking-wider text-[#737373] uppercase">DAILY SCHEDULE SPECTRUM</span>
+            <span id="timeSpectrumDominance" class="text-[9px] font-bold text-[#E5B96B] uppercase">MORNING FOCUSED</span>
+          </div>
+
+          <!-- Multi-segment stacked bar -->
+          <div class="w-full h-3 rounded-full bg-[#1B1B1B] overflow-hidden flex">
+            <div id="specMorn" style="width: 40%;" class="bg-[#E5B96B] h-full transition-all duration-500" title="Morning"></div>
+            <div id="specNoon" style="width: 25%;" class="bg-[#F5F5F5] h-full transition-all duration-500" title="Afternoon"></div>
+            <div id="specEvn" style="width: 20%;" class="bg-[#86C99A] h-full transition-all duration-500" title="Evening"></div>
+            <div id="specNight" style="width: 15%;" class="bg-[#A78BFA] h-full transition-all duration-500" title="Night"></div>
+          </div>
+
+          <!-- Spectrum Legend -->
+          <div class="grid grid-cols-4 gap-1 text-[9px] font-semibold text-center">
+            <div class="flex items-center gap-1 justify-center text-[#E5B96B]">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#E5B96B]"></span>
+              <span>MORN (<span id="countMorn">0</span>)</span>
+            </div>
+            <div class="flex items-center gap-1 justify-center text-[#F5F5F5]">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#F5F5F5]"></span>
+              <span>NOON (<span id="countNoon">0</span>)</span>
+            </div>
+            <div class="flex items-center gap-1 justify-center text-[#86C99A]">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#86C99A]"></span>
+              <span>EVN (<span id="countEvn">0</span>)</span>
+            </div>
+            <div class="flex items-center gap-1 justify-center text-[#A78BFA]">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#A78BFA]"></span>
+              <span>NIGHT (<span id="countNight">0</span>)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- BENTO 6: Consistency Badges & Achievements (Habit-Specific Milestones) -->
+        <div class="bg-[#141414] border border-[#292929] rounded-[20px] p-4 flex flex-col gap-3 shrink-0">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-bold tracking-wider text-[#737373] uppercase">DISCIPLINE MILESTONES BY HABIT</span>
+            <span id="unlockedBadgesFraction" class="text-[9px] font-bold text-[#86C99A] uppercase">0 EARNED</span>
+          </div>
+
+          <div id="habitMilestonesContainer" class="flex flex-col gap-3">
+            <!-- Dynamic habit milestone cards rendered by JS -->
+          </div>
+        </div>
+
+        <!-- BENTO 7: Local Vault Backup & Security -->
+        <div class="bg-[#141414] border border-[#292929] rounded-[20px] p-4 flex flex-col gap-3 shrink-0">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-bold tracking-widest uppercase text-[#737373]">LOCAL VAULT BACKUP</span>
+            <span class="text-[9px] font-bold text-[#86C99A] uppercase">ZERO CLOUD</span>
+          </div>
+          <p class="text-[12px] text-[#A0A0A0] leading-relaxed">
+            All records exist exclusively in your browser and on-device memory. Export or restore your backup anytime.
+          </p>
+          <div class="grid grid-cols-2 gap-2">
+            <button id="exportVaultBtn" class="py-2.5 px-3 rounded-xl bg-[#1B1B1B] hover:bg-[#222222] border border-[#292929] hover:border-[#E5B96B] text-[#F5F5F5] text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors">
+              <svg class="w-3.5 h-3.5 text-[#E5B96B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              EXPORT .JSON
+            </button>
+            <button id="importVaultBtn" class="py-2.5 px-3 rounded-xl bg-[#1B1B1B] hover:bg-[#222222] border border-[#292929] hover:border-[#86C99A] text-[#F5F5F5] text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors">
+              <svg class="w-3.5 h-3.5 text-[#86C99A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l4-4m0 0l4 4m-4-4v12"/></svg>
+              RESTORE
+            </button>
+            <input type="file" id="importFileInput" accept=".json" class="hidden" />
+          </div>
+        </div>
+
+        <!-- Safe Bottom Breathing Spacer -->
+        <div class="h-10 shrink-0"></div>
+
+      </div>
+
+    </main>
+
+    <!-- Bottom Menu Bar: ONLY TWO OPTIONS (LIST & PROFILE) -->
+    <footer class="w-full max-w-sm pb-4 pt-1 z-20 flex-shrink-0">
+      <nav class="w-full bg-[#141414] border border-[#292929] rounded-[22px] px-6 py-2.5 flex items-center justify-around shadow-[0_12px_32px_rgba(0,0,0,0.7)]">
+        
+        <!-- Option 1: LIST (Active) -->
+        <button id="tabList" class="flex flex-col items-center gap-1 text-[#F5F5F5] transition-colors group">
+          <svg class="w-5 h-5 text-[#F5F5F5] group-hover:scale-105 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/>
+          </svg>
+          <span class="text-[11px] font-semibold tracking-wider uppercase text-[#F5F5F5]">LIST</span>
+        </button>
+
+        <div class="w-px h-6 bg-[#202020]"></div>
+
+        <!-- Option 2: PROFILE (Inactive) -->
+        <button id="tabProfile" class="flex flex-col items-center gap-1 text-[#737373] hover:text-[#A0A0A0] transition-colors group">
+          <svg class="w-5 h-5 text-[#737373] group-hover:text-[#A0A0A0] group-hover:scale-105 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+          </svg>
+          <span class="text-[11px] font-semibold tracking-wider uppercase text-[#737373] group-hover:text-[#A0A0A0]">PROFILE</span>
+        </button>
+
+      </nav>
+    </footer>
+
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- SCREEN 4: ADD HABIT (TITLE, DURATION TIMER, OPTIONAL TIME)     -->
+  <!-- ============================================================== -->
+  <div id="createHabitScreen" class="screen-container z-20 opacity-0 pointer-events-none translate-y-4">
+    <header class="w-full max-w-sm flex items-center justify-between pt-2">
+      <button id="backToHomeBtn" class="w-9 h-9 rounded-xl bg-[#141414] border border-[#292929] text-[#A0A0A0] hover:text-[#F5F5F5] flex items-center justify-center transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+      </button>
+      <span class="text-[11px] font-semibold tracking-[0.14em] uppercase text-[#737373]">NEW DISCIPLINE</span>
+      <div class="w-9"></div>
+    </header>
+
+    <main class="w-full max-w-sm flex-1 flex flex-col justify-center gap-3.5 my-3 overflow-y-auto">
+      <div>
+        <h2 class="font-bebas text-3xl sm:text-4xl text-[#F5F5F5] tracking-[0.04em] uppercase leading-none">ADD HABIT</h2>
+        <p class="font-tinos italic text-[15px] text-[#A0A0A0] mt-1.5">Define your daily commitment with precision.</p>
+      </div>
+
+      <!-- Bento Card 1: Habit Title / Headline -->
+      <div class="bg-[#141414] border border-[#292929] rounded-[18px] p-4 flex flex-col gap-2">
+        <label for="habitTitle" class="text-[11px] font-semibold tracking-[0.08em] uppercase text-[#737373] flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-[#A0A0A0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+          HABIT TITLE / HEADLINE
+        </label>
+        <input 
+          type="text" 
+          id="habitTitle" 
+          placeholder="e.g. Read Philosophy, 1 DSA Problem" 
+          class="w-full bg-[#1B1B1B] border border-[#292929] rounded-xl px-3.5 py-2.5 text-sm text-[#F5F5F5] placeholder-[#505050] focus:outline-none focus:border-[#F5F5F5] transition-colors"
+        />
+      </div>
+
+      <!-- Bento Card 2: Duration / Timer (Hours & Minutes Stepper + Presets) -->
+      <div class="bg-[#141414] border border-[#292929] rounded-[18px] p-4 flex flex-col gap-3">
+        <div class="flex items-center justify-between">
+          <label class="text-[11px] font-semibold tracking-[0.08em] uppercase text-[#737373] flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-[#A0A0A0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            HOW MANY HOURS / TIMER
+          </label>
+          <span id="durationSummary" class="text-[12px] font-bold tracking-wide text-[#E5B96B]">30 MIN</span>
+        </div>
+
+        <!-- Timer Display & Stepper -->
+        <div class="bg-[#101010] border border-[#202020] rounded-xl p-3 flex items-center justify-between">
+          <button id="decrementDurationBtn" type="button" class="w-9 h-9 rounded-lg bg-[#1B1B1B] hover:bg-[#222222] border border-[#292929] text-[#F5F5F5] flex items-center justify-center font-bold text-lg active:scale-95 transition-all">
+            −
+          </button>
+          
+          <div class="flex items-baseline gap-1.5">
+            <span id="displayDurationValue" class="font-bebas text-3xl text-[#F5F5F5] leading-none tracking-wider">30</span>
+            <span id="displayDurationUnit" class="text-[11px] font-bold text-[#737373] tracking-widest uppercase">MINUTES</span>
+          </div>
+
+          <button id="incrementDurationBtn" type="button" class="w-9 h-9 rounded-lg bg-[#1B1B1B] hover:bg-[#222222] border border-[#292929] text-[#F5F5F5] flex items-center justify-center font-bold text-lg active:scale-95 transition-all">
+            +
+          </button>
+        </div>
+
+        <!-- Quick Preset Pills -->
+        <div class="grid grid-cols-5 gap-1.5">
+          <button type="button" class="duration-preset py-1.5 rounded-lg bg-[#1B1B1B] border border-[#292929] text-[11px] font-semibold text-[#737373] hover:text-[#F5F5F5] transition-colors" data-minutes="15">15m</button>
+          <button type="button" class="duration-preset active-preset py-1.5 rounded-lg bg-[#222222] border border-[#F5F5F5] text-[11px] font-semibold text-[#F5F5F5] transition-colors" data-minutes="30">30m</button>
+          <button type="button" class="duration-preset py-1.5 rounded-lg bg-[#1B1B1B] border border-[#292929] text-[11px] font-semibold text-[#737373] hover:text-[#F5F5F5] transition-colors" data-minutes="45">45m</button>
+          <button type="button" class="duration-preset py-1.5 rounded-lg bg-[#1B1B1B] border border-[#292929] text-[11px] font-semibold text-[#737373] hover:text-[#F5F5F5] transition-colors" data-minutes="60">1h</button>
+          <button type="button" class="duration-preset py-1.5 rounded-lg bg-[#1B1B1B] border border-[#292929] text-[11px] font-semibold text-[#737373] hover:text-[#F5F5F5] transition-colors" data-minutes="120">2h</button>
+        </div>
+      </div>
+
+      <!-- Bento Card 3: 24-Hour Fixed Schedule / Time Window (From - To) -->
+      <div class="bg-[#141414] border border-[#292929] rounded-[18px] p-4 flex flex-col gap-3">
+        <div class="flex items-center justify-between">
+          <label class="text-[11px] font-semibold tracking-[0.08em] uppercase text-[#737373] flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-[#A0A0A0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            24-HOUR FIXED SCHEDULE
+          </label>
+          <span id="windowModeBadge" class="text-[10px] font-bold tracking-wider text-[#E5B96B] uppercase px-2 py-0.5 rounded bg-[#101010] border border-[#202020]">07:00 – 07:30</span>
+        </div>
+
+        <!-- 24-Hour From -> To Time Controls -->
+        <div class="grid grid-cols-2 gap-2">
+          <!-- FROM Card -->
+          <div class="bg-[#101010] border border-[#202020] rounded-xl p-2.5 flex flex-col gap-1 focus-within:border-[#F5F5F5] transition-colors">
+            <span class="text-[9px] font-bold tracking-widest text-[#737373] uppercase">FROM (START)</span>
+            <input 
+              type="time" 
+              id="startTimeInput" 
+              value="07:00" 
+              class="bg-transparent text-lg font-bebas tracking-wider text-[#F5F5F5] focus:outline-none w-full cursor-pointer [color-scheme:dark]"
+            />
+          </div>
+
+          <!-- TO Card -->
+          <div class="bg-[#101010] border border-[#202020] rounded-xl p-2.5 flex flex-col gap-1 focus-within:border-[#F5F5F5] transition-colors">
+            <span class="text-[9px] font-bold tracking-widest text-[#737373] uppercase">TO (FINISH)</span>
+            <input 
+              type="time" 
+              id="endTimeInput" 
+              value="07:30" 
+              class="bg-transparent text-lg font-bebas tracking-wider text-[#F5F5F5] focus:outline-none w-full cursor-pointer [color-scheme:dark]"
+            />
+          </div>
+        </div>
+
+        <!-- Quick 24-Hour Period Presets -->
+        <div class="grid grid-cols-5 gap-1 pt-0.5">
+          <button type="button" class="time-segment active-segment py-1.5 px-0.5 rounded-lg bg-[#222222] border border-[#F5F5F5] text-center text-[#F5F5F5] text-[10px] font-bold tracking-wider transition-all" data-preset="CUSTOM" data-start="07:00" data-end="07:30">CUSTOM</button>
+          <button type="button" class="time-segment py-1.5 px-0.5 rounded-lg bg-[#1B1B1B] border border-[#292929] text-center text-[#737373] hover:text-[#A0A0A0] text-[10px] font-bold tracking-wider transition-all" data-preset="MORNING" data-start="07:00" data-end="07:30">MORN</button>
+          <button type="button" class="time-segment py-1.5 px-0.5 rounded-lg bg-[#1B1B1B] border border-[#292929] text-center text-[#737373] hover:text-[#A0A0A0] text-[10px] font-bold tracking-wider transition-all" data-preset="NOON" data-start="13:00" data-end="13:30">NOON</button>
+          <button type="button" class="time-segment py-1.5 px-0.5 rounded-lg bg-[#1B1B1B] border border-[#292929] text-center text-[#737373] hover:text-[#A0A0A0] text-[10px] font-bold tracking-wider transition-all" data-preset="NIGHT" data-start="20:00" data-end="20:30">NIGHT</button>
+          <button type="button" class="time-segment py-1.5 px-0.5 rounded-lg bg-[#1B1B1B] border border-[#292929] text-center text-[#737373] hover:text-[#A0A0A0] text-[10px] font-bold tracking-wider transition-all" data-preset="ANYTIME" data-start="" data-end="">ANY</button>
+        </div>
+      </div>
+    </main>
+
+    <footer class="w-full max-w-sm flex flex-col items-center pb-8 z-20">
+      <button id="saveHabitBtn" class="w-full py-3.5 px-6 rounded-[14px] bg-[#F5F5F5] hover:bg-white text-[#090909] font-inter font-semibold text-[14px] tracking-[0.02em] active:scale-[0.98] transition-all duration-150 flex items-center justify-center gap-2 border border-[#F5F5F5]">
+        <span>SAVE HABIT</span>
+        <svg class="w-4 h-4 text-[#090909]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+        </svg>
+      </button>
+    </footer>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- SCREEN 5: DEDICATED HABIT PAGE (GITHUB-STYLE MONTHLY GRID)     -->
+  <!-- ============================================================== -->
+  <div id="habitDedicatedScreen" class="screen-container z-20 opacity-0 pointer-events-none translate-y-4">
+    <header class="w-full max-w-sm flex items-center justify-between pt-2 flex-shrink-0">
+      <button id="backFromDedicatedBtn" class="w-9 h-9 rounded-xl bg-[#141414] border border-[#292929] text-[#A0A0A0] hover:text-[#F5F5F5] flex items-center justify-center transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+      </button>
+      <span class="text-[11px] font-semibold tracking-[0.14em] uppercase text-[#737373]">DISCIPLINE OVERVIEW</span>
+      <button id="deleteHabitBtn" class="w-9 h-9 rounded-xl bg-[#141414] border border-[#292929] text-[#737373] hover:text-[#E47777] flex items-center justify-center transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+        </svg>
+      </button>
+    </header>
+
+    <main class="w-full max-w-sm flex-1 min-h-0 flex flex-col justify-start gap-3 my-2 overflow-y-auto custom-scroll pb-12">
+      
+      <!-- Bento Card 1: Habit Title & Schedule Info -->
+      <div class="bg-[#141414] border border-[#292929] rounded-[20px] p-4 flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-bold tracking-[0.14em] uppercase text-[#737373]">TARGET HABIT</span>
+          <span id="dedicatedScheduleBadge" class="text-[10px] font-bold tracking-wider text-[#E5B96B] uppercase px-2 py-0.5 rounded bg-[#101010] border border-[#202020]">07:00 – 07:30</span>
+        </div>
+        <h2 id="dedicatedHabitTitle" class="font-bebas text-3xl sm:text-4xl text-[#F5F5F5] tracking-[0.04em] uppercase leading-tight">READ PHILOSOPHY</h2>
+        
+        <div class="flex items-center gap-2 mt-1">
+          <span id="dedicatedDurationPill" class="text-[11px] font-semibold text-[#F5F5F5] bg-[#1B1B1B] border border-[#292929] px-2.5 py-1 rounded-lg">30 MIN DURATION</span>
+          <span id="dedicatedStatusPill" class="text-[11px] font-semibold text-[#86C99A] bg-[#161a17] border border-[#86C99A]/40 px-2.5 py-1 rounded-lg">ACTIVE ROUTINE</span>
+        </div>
+      </div>
+
+      <!-- Bento Card 2: GitHub-Style Monthly Contribution Grid -->
+      <div class="bg-[#141414] border border-[#292929] rounded-[20px] p-4 flex flex-col gap-3">
+        <!-- Month Header with Multi-Month Navigation -->
+        <div class="flex items-center justify-between pb-1 border-b border-[#202020]">
+          <div class="flex items-center gap-2">
+            <button id="prevMonthBtn" type="button" class="w-7 h-7 rounded-lg bg-[#1B1B1B] hover:bg-[#252525] border border-[#292929] text-[#A0A0A0] hover:text-[#F5F5F5] flex items-center justify-center text-sm font-bold transition-all active:scale-95" title="Previous Month">
+              ‹
+            </button>
+            <div class="flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-[#86C99A]" fill="currentColor" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/></svg>
+              <span id="dedicatedMonthName" class="font-bebas text-xl text-[#F5F5F5] tracking-wider uppercase">NOVEMBER 2026</span>
+            </div>
+            <button id="nextMonthBtn" type="button" class="w-7 h-7 rounded-lg bg-[#1B1B1B] hover:bg-[#252525] border border-[#292929] text-[#A0A0A0] hover:text-[#F5F5F5] flex items-center justify-center text-sm font-bold transition-all active:scale-95" title="Next Month">
+              ›
+            </button>
+          </div>
+          <span class="text-[9px] font-bold text-[#737373] tracking-wider uppercase">TAP TO LOG</span>
+        </div>
+
+        <!-- Days of Week Header -->
+        <div class="grid grid-cols-7 gap-1.5 text-center text-[10px] font-bold text-[#505050]">
+          <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+        </div>
+
+        <!-- 30-Day GitHub Grid Dots / Squares -->
+        <div id="githubDaysGrid" class="grid grid-cols-7 gap-1.5">
+          <!-- Dynamically generated days -->
+        </div>
+
+        <!-- Heatmap Legend -->
+        <div class="flex items-center justify-between pt-1 border-t border-[#202020] text-[10px] text-[#737373]">
+          <div class="flex items-center gap-2">
+            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-[3px] bg-[#86C99A]"></span> Completed</span>
+            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-[3px] bg-[#1B1B1B] border border-[#292929]"></span> Pending</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span>OFFLINE ONLY</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bento Card 3: Metrics & Consistency Overview -->
+      <div class="grid grid-cols-2 gap-2.5">
+        <div class="bg-[#141414] border border-[#292929] rounded-[18px] p-3.5 flex flex-col gap-1">
+          <span class="text-[10px] font-bold tracking-wider text-[#737373] uppercase">STREAK</span>
+          <div class="flex items-baseline gap-1.5">
+            <span id="dedicatedStreakValue" class="font-bebas text-3xl text-[#F5F5F5] leading-none">0</span>
+            <span class="text-[10px] font-bold text-[#E5B96B] uppercase">DAYS</span>
+          </div>
+          <span class="text-[10px] text-[#505050] mt-0.5">Consecutive logged</span>
+        </div>
+
+        <div class="bg-[#141414] border border-[#292929] rounded-[18px] p-3.5 flex flex-col gap-1">
+          <span class="text-[10px] font-bold tracking-wider text-[#737373] uppercase">MONTH RATE</span>
+          <div class="flex items-baseline gap-1.5">
+            <span id="dedicatedCompletionRate" class="font-bebas text-3xl text-[#86C99A] leading-none">0%</span>
+            <span id="dedicatedCompletedFraction" class="text-[10px] font-bold text-[#737373]">0/30</span>
+          </div>
+          <span class="text-[10px] text-[#505050] mt-0.5">Monthly consistency</span>
+        </div>
+      </div>
+
+      <!-- Bento Card 4: Daily Session Reflection & Notes Log ("How About Your Day?") -->
+      <div class="bg-[#141414] border border-[#292929] rounded-[20px] p-4 flex flex-col gap-2.5">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-1.5">
+            <span class="text-xs">📝</span>
+            <span id="dedicatedSessionLogHeaderDate" class="text-[10px] font-bold tracking-wider text-[#737373] uppercase">DAILY SESSION LOG • TODAY</span>
+          </div>
+          <button id="dedicatedEditNoteBtn" type="button" class="text-[10px] font-bold text-[#86C99A] hover:underline uppercase tracking-wider transition-all">
+            ✎ LOG / EDIT NOTE
+          </button>
+        </div>
+
+        <div id="dedicatedReflectionContainer" class="p-3 rounded-xl bg-[#101010] hover:bg-[#161616] border border-[#202020] hover:border-[#86C99A]/40 cursor-pointer flex flex-col gap-1.5 transition-all">
+          <div class="flex items-center gap-2">
+            <span id="dedicatedMoodBadge" class="text-[10px] font-semibold text-[#86C99A] bg-[#161a17] border border-[#86C99A]/30 px-2 py-0.5 rounded">🔥 Crushed it</span>
+            <span id="dedicatedNoteDate" class="text-[10px] text-[#737373]">Nov 6, 2026</span>
+          </div>
+          <p id="dedicatedNoteText" class="text-xs text-[#E5E5E5] italic leading-relaxed">
+            "Completed session."
+          </p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: 12-MONTH YEARLY DISCIPLINE DOSSIER                      -->
+  <!-- ============================================================== -->
+  <div id="yearlyDossierModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-3 sm:p-4 transition-all duration-300">
+    <div class="w-full max-w-xl max-h-[92vh] bg-[#141414] border border-[#292929] rounded-[24px] p-5 flex flex-col gap-4 shadow-[0_25px_60px_rgba(0,0,0,0.95)] overflow-hidden">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-[#202020] pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-[#161a17] border border-[#86C99A]/40 flex items-center justify-center text-base text-[#86C99A]">
+            📅
+          </div>
+          <div class="flex flex-col">
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-bold tracking-widest uppercase text-[#86C99A]">12-MONTH DISCIPLINE DOSSIER</span>
+              <span id="yearlyDossierYear" class="text-[10px] font-bold text-[#E5B96B] bg-[#1d1912] border border-[#E5B96B]/30 px-1.5 py-0.5 rounded">2026</span>
+            </div>
+            <h3 id="yearlyDossierTitle" class="font-bebas text-2xl text-[#F5F5F5] tracking-wide uppercase leading-tight">MORNING RUN</h3>
+          </div>
+        </div>
+        <button id="closeYearlyDossierBtn" type="button" class="w-8 h-8 rounded-lg bg-[#1B1B1B] hover:bg-[#222222] border border-[#292929] text-[#737373] hover:text-[#F5F5F5] flex items-center justify-center text-sm transition-colors">
+          ✕
+        </button>
+      </div>
+
+      <!-- Quick Stats Strip -->
+      <div class="grid grid-cols-4 gap-2">
+        <div class="bg-[#101010] border border-[#202020] rounded-xl p-2.5 flex flex-col">
+          <span class="text-[8px] font-bold text-[#737373] uppercase">TOTAL LOGGED</span>
+          <span id="yearlyTotalDays" class="font-bebas text-2xl text-[#86C99A] leading-none mt-1">0</span>
+          <span class="text-[8px] text-[#505050]">Days completed</span>
+        </div>
+        <div class="bg-[#101010] border border-[#202020] rounded-xl p-2.5 flex flex-col">
+          <span class="text-[8px] font-bold text-[#737373] uppercase">BEST STREAK</span>
+          <span id="yearlyBestStreak" class="font-bebas text-2xl text-[#E5B96B] leading-none mt-1">0</span>
+          <span class="text-[8px] text-[#505050]">Unbroken days</span>
+        </div>
+        <div class="bg-[#101010] border border-[#202020] rounded-xl p-2.5 flex flex-col">
+          <span class="text-[8px] font-bold text-[#737373] uppercase">FROZEN DAYS</span>
+          <span id="yearlyFrozenCount" class="font-bebas text-2xl text-[#38BDF8] leading-none mt-1">0</span>
+          <span class="text-[8px] text-[#505050]">Protected</span>
+        </div>
+        <div class="bg-[#101010] border border-[#202020] rounded-xl p-2.5 flex flex-col">
+          <span class="text-[8px] font-bold text-[#737373] uppercase">CONSISTENCY</span>
+          <span id="yearlyConsistencyRate" class="font-bebas text-2xl text-[#F5F5F5] leading-none mt-1">0%</span>
+          <span class="text-[8px] text-[#505050]">Year score</span>
+        </div>
+      </div>
+
+      <!-- Scrollable 12-Month Grid Sheets Container (Compact 2 Columns x 6 Rows) -->
+      <div id="yearlyMonthsGridContainer" class="flex-1 overflow-y-auto custom-scroll grid grid-cols-2 gap-2.5 pr-1">
+        <!-- 12 monthly cards dynamically populated via JS -->
+      </div>
+
+      <!-- Interactive Day Inspector Strip ("What day what type he have done") -->
+      <div id="yearlyDayInspector" class="bg-[#101010] border border-[#222222] rounded-xl p-2.5 flex items-center justify-between transition-all">
+        <div class="flex items-center gap-2.5 overflow-hidden">
+          <div id="inspectorDotBadge" class="w-5 h-5 rounded-[5px] bg-[#86C99A] flex items-center justify-center text-[10px] text-[#090909] font-bold shrink-0">
+            ✓
+          </div>
+          <div class="flex flex-col">
+            <div class="flex items-center gap-2">
+              <span id="inspectorDateText" class="font-bold text-[#F5F5F5] uppercase tracking-wider text-[11px]">NOV 6, 2026</span>
+              <span id="inspectorStatusBadge" class="text-[9px] font-bold text-[#86C99A] uppercase px-1.5 py-0.2 bg-[#161a17] border border-[#86C99A]/30 rounded">COMPLETED</span>
+            </div>
+            <span id="inspectorNoteText" class="text-[11px] text-[#A0A0A0] italic truncate max-w-[280px] sm:max-w-md">"Completed 30 min morning focus session"</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Legend & Dismiss Button -->
+      <div class="flex items-center justify-between border-t border-[#202020] pt-3">
+        <div class="flex items-center gap-3 text-[10px] text-[#737373]">
+          <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-[3px] bg-[#86C99A]"></span> Done</span>
+          <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-[3px] bg-[#38BDF8]"></span> Frozen ❄️</span>
+          <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-[3px] bg-[#1B1B1B] border border-[#292929]"></span> Missed</span>
+        </div>
+        <button id="closeYearlyDossierBottomBtn" type="button" class="py-2 px-5 rounded-xl bg-[#1B1B1B] hover:bg-[#252525] border border-[#292929] text-[#F5F5F5] font-semibold text-[11px] uppercase tracking-wider transition-colors">
+          CLOSE DOSSIER
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- FLOATING OFFLINE SMART NOTIFICATION TOAST                      -->
+  <!-- ============================================================== -->
+  <div id="offlineNotificationToast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-full max-w-sm px-4 pointer-events-none transition-all duration-300 opacity-0 -translate-y-4">
+    <div class="pointer-events-auto bg-[#141414]/95 backdrop-blur-md border border-[#86C99A]/50 rounded-[20px] p-3.5 flex items-start gap-3 shadow-[0_15px_40px_rgba(0,0,0,0.8)]">
+      <div class="w-8 h-8 rounded-xl bg-[#161a17] border border-[#86C99A]/50 flex items-center justify-center text-sm shrink-0 mt-0.5">
+        🔥
+      </div>
+      <div class="flex-1 flex flex-col gap-0.5">
+        <div class="flex items-center justify-between">
+          <span class="text-[9px] font-bold tracking-widest text-[#86C99A] uppercase">LOCAL OFFLINE REMINDER</span>
+          <span id="toastTimeBadge" class="text-[9px] font-bold text-[#737373]">NOW</span>
+        </div>
+        <h4 id="toastTitle" class="text-[13px] font-bold text-[#F5F5F5] leading-tight">Time for Morning Run</h4>
+        <p id="toastMessage" class="text-[11px] text-[#A0A0A0] leading-snug">Scheduled routine starts now. Keep your momentum unbroken!</p>
+        <div class="flex items-center gap-2 mt-2">
+          <button id="toastMarkDoneBtn" type="button" class="py-1 px-3 rounded-lg bg-[#86C99A] hover:bg-[#72b586] text-[#090909] font-bold text-[10px] uppercase tracking-wider transition-transform active:scale-95">
+            ✓ MARK AS DONE
+          </button>
+          <button id="toastDismissBtn" type="button" class="py-1 px-2.5 rounded-lg bg-[#1B1B1B] hover:bg-[#252525] border border-[#292929] text-[#737373] hover:text-[#F5F5F5] font-semibold text-[10px] uppercase transition-colors">
+            DISMISS
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: DAILY REFLECTION & SHORT SESSION DESCRIPTION ("HOW ABOUT YOUR DAY?") -->
+  <!-- ============================================================== -->
+  <div id="reflectionModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden items-end sm:items-center justify-center p-0 sm:p-4 transition-all duration-300">
+    <div class="w-full max-w-sm bg-[#141414] border-t sm:border border-[#292929] rounded-t-[26px] sm:rounded-[24px] p-5 flex flex-col gap-3.5 shadow-[0_-12px_45px_rgba(0,0,0,0.95)]">
+      
+      <!-- Pull handle for mobile sheet feel -->
+      <div class="w-10 h-1 bg-[#292929] rounded-full mx-auto sm:hidden mb-0.5"></div>
+
+      <!-- Header -->
+      <div class="flex items-center justify-between border-b border-[#202020] pb-2.5">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-[#161a17] border border-[#86C99A]/40 flex items-center justify-center text-xs text-[#86C99A]">
+            ✓
+          </div>
+          <div class="flex flex-col">
+            <span id="reflectionDateBadge" class="text-[9px] font-bold tracking-widest uppercase text-[#86C99A]">STREAK LOGGED • TODAY</span>
+            <span id="reflectionHabitTitle" class="text-xs font-semibold text-[#F5F5F5] uppercase">MORNING MEDITATION</span>
+          </div>
+        </div>
+        <button id="closeReflectionBtn" type="button" class="w-7 h-7 rounded-lg bg-[#1B1B1B] hover:bg-[#252525] border border-[#292929] text-[#737373] hover:text-[#F5F5F5] flex items-center justify-center text-xs transition-colors">
+          ✕
+        </button>
+      </div>
+
+      <!-- Main Prompt & Question -->
+      <div class="flex flex-col gap-1">
+        <h3 class="font-bebas text-2xl text-[#F5F5F5] tracking-wide uppercase leading-tight">HOW WAS YOUR DAY?</h3>
+        <p class="text-[12px] text-[#A0A0A0] leading-snug">
+          Jot down a quick 1-line note of what you accomplished in this session.
+        </p>
+      </div>
+
+      <!-- Quick Mood / Session Vibe Chips -->
+      <div class="flex flex-wrap gap-1.5" id="reflectionMoodChips">
+        <button type="button" class="mood-chip px-2.5 py-1 rounded-lg bg-[#1B1B1B] border border-[#292929] hover:border-[#86C99A] text-[11px] text-[#D4D4D4] font-medium transition-all" data-mood="🔥 Crushed it">🔥 Crushed it</button>
+        <button type="button" class="mood-chip px-2.5 py-1 rounded-lg bg-[#1B1B1B] border border-[#292929] hover:border-[#86C99A] text-[11px] text-[#D4D4D4] font-medium transition-all" data-mood="⚡ Energized">⚡ Energized</button>
+        <button type="button" class="mood-chip px-2.5 py-1 rounded-lg bg-[#1B1B1B] border border-[#292929] hover:border-[#86C99A] text-[11px] text-[#D4D4D4] font-medium transition-all" data-mood="🧘 Mindful">🧘 Mindful</button>
+        <button type="button" class="mood-chip px-2.5 py-1 rounded-lg bg-[#1B1B1B] border border-[#292929] hover:border-[#86C99A] text-[11px] text-[#D4D4D4] font-medium transition-all" data-mood="💪 Pushed through">💪 Pushed through</button>
+      </div>
+
+      <!-- Short Description Input -->
+      <div class="flex flex-col gap-1.5">
+        <div class="relative">
+          <textarea 
+            id="reflectionNoteInput" 
+            rows="2" 
+            maxlength="140"
+            placeholder="e.g. 30 min focused session, felt great and disciplined..." 
+            class="w-full bg-[#1B1B1B] border border-[#292929] rounded-xl px-3.5 py-2.5 text-xs text-[#F5F5F5] placeholder-[#505050] focus:outline-none focus:border-[#86C99A] transition-colors resize-none custom-scroll"
+          ></textarea>
+        </div>
+        <div class="flex items-center justify-between text-[10px] text-[#505050]">
+          <span>Short 1-line recap</span>
+          <span id="reflectionCharCount">0/140</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col gap-2 pt-1">
+        <button id="saveReflectionBtn" type="button" class="w-full py-2.5 px-4 rounded-xl bg-[#86C99A] hover:bg-[#97d8ab] text-[#090909] font-inter font-bold text-xs uppercase tracking-wider active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 shadow-[0_4px_16px_rgba(134,201,154,0.3)]">
+          <span>SAVE NOTE & STREAK</span>
+          <svg class="w-3.5 h-3.5 text-[#090909]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M5 13l4 4L19 7"/></svg>
+        </button>
+        <button id="skipReflectionBtn" type="button" class="w-full py-1.5 text-center text-[11px] font-semibold text-[#737373] hover:text-[#A0A0A0] uppercase tracking-wider transition-colors">
+          SKIP FOR NOW
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SCRIPT ENGINE -->
+  <script>
+    const canvas = document.getElementById('mindCanvas');
+    const ctx = canvas.getContext('2d');
+    const logoContainer = document.getElementById('logoContainer');
+    const typographyBlock = document.getElementById('typographyBlock');
+    const splashFooter = document.getElementById('splashFooter');
+    const makeItBtn = document.getElementById('makeItBtn');
+    
+    // Screens
+    const splashScreen = document.getElementById('splashScreen');
+    const accountScreen = document.getElementById('accountScreen');
+    const homeScreen = document.getElementById('homeScreen');
+    const createHabitScreen = document.getElementById('createHabitScreen');
+    const habitDedicatedScreen = document.getElementById('habitDedicatedScreen');
+    
+    const backToSplashBtn = document.getElementById('backToSplashBtn');
+    const continueBtn = document.getElementById('continueBtn');
+    const homeGreeting = document.getElementById('homeGreeting');
+    const centerPlusBtn = document.getElementById('centerPlusBtn');
+    const addAnotherHabitBtn = document.getElementById('addAnotherHabitBtn');
+    const backToHomeBtn = document.getElementById('backToHomeBtn');
+    const saveHabitBtn = document.getElementById('saveHabitBtn');
+
+    // Dedicated Habit Screen Elements
+    const backFromDedicatedBtn = document.getElementById('backFromDedicatedBtn');
+    const deleteHabitBtn = document.getElementById('deleteHabitBtn');
+    const dedicatedHabitTitle = document.getElementById('dedicatedHabitTitle');
+    const dedicatedScheduleBadge = document.getElementById('dedicatedScheduleBadge');
+    const dedicatedDurationPill = document.getElementById('dedicatedDurationPill');
+    const dedicatedMonthName = document.getElementById('dedicatedMonthName');
+    const prevMonthBtn = document.getElementById('prevMonthBtn');
+    const nextMonthBtn = document.getElementById('nextMonthBtn');
+    const githubDaysGrid = document.getElementById('githubDaysGrid');
+    const dedicatedStreakValue = document.getElementById('dedicatedStreakValue');
+    const dedicatedCompletionRate = document.getElementById('dedicatedCompletionRate');
+    const dedicatedCompletedFraction = document.getElementById('dedicatedCompletedFraction');
+
+    // Today Progress Header Elements
+    const todayProgressBadge = document.getElementById('todayProgressBadge');
+    const todayProgressDot = document.getElementById('todayProgressDot');
+    const todayProgressText = document.getElementById('todayProgressText');
+
+    let currentSelectedHabitId = null;
+    let currentGridYear = 2026;
+    let currentGridMonth = 11;
+    const monthNames = [
+      'JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE',
+      'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'
+    ];
+    // Home views
+    const emptyHabitView = document.getElementById('emptyHabitView');
+    const habitsListView = document.getElementById('habitsListView');
+    const habitsContainer = document.getElementById('habitsContainer');
+    const streakCountDisplay = document.getElementById('streakCountDisplay');
+
+    // Navigation Tabs
+    const tabList = document.getElementById('tabList');
+    const tabProfile = document.getElementById('tabProfile');
+
+    // Password Elements
+    const userName = document.getElementById('userName');
+    const userPassword = document.getElementById('userPassword');
+    const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+    const eyeIcon = document.getElementById('eyeIcon');
+    const strengthLabel = document.getElementById('strengthLabel');
+    const bar1 = document.getElementById('bar1');
+    const bar2 = document.getElementById('bar2');
+    const bar3 = document.getElementById('bar3');
+    const bar4 = document.getElementById('bar4');
+
+    // Profile Display & Reset Elements
+    const profileDisplayName = document.getElementById('profileDisplayName');
+    const resetProfileBtn = document.getElementById('resetProfileBtn');
+    const vaultHabitsCount = document.getElementById('vaultHabitsCount');
+
+    // Habit Form Elements
+    const habitTitleInput = document.getElementById('habitTitle');
+    const durationSummary = document.getElementById('durationSummary');
+    const displayDurationValue = document.getElementById('displayDurationValue');
+    const displayDurationUnit = document.getElementById('displayDurationUnit');
+    const decrementDurationBtn = document.getElementById('decrementDurationBtn');
+    const incrementDurationBtn = document.getElementById('incrementDurationBtn');
+    const presetButtons = document.querySelectorAll('.duration-preset');
+    const segmentButtons = document.querySelectorAll('.time-segment');
+
+    // 24-Hour Schedule Elements
+    const startTimeInput = document.getElementById('startTimeInput');
+    const endTimeInput = document.getElementById('endTimeInput');
+    const windowModeBadge = document.getElementById('windowModeBadge');
+
+    let currentMinutes = 30;
+    let selectedTimeOfDay = '07:00 – 07:30';
+    let habits = [];
+    let completedCount = 0;
+
+    function updateTodayProgressBadge() {
+      if (!todayProgressText) return;
+      if (!Array.isArray(habits)) habits = [];
+      const total = habits.length;
+      const completed = habits.filter(h => h.completed || (h.completedDays && h.completedDays.includes(6))).length;
+      if (total === 0) {
+        todayProgressText.textContent = 'NO HABITS';
+        if (todayProgressDot) todayProgressDot.className = 'w-2 h-2 rounded-full bg-[#505050]';
+      } else if (completed === total) {
+        todayProgressText.textContent = '✓ ALL DONE TODAY';
+        if (todayProgressDot) todayProgressDot.className = 'w-2 h-2 rounded-full bg-[#86C99A] shadow-[0_0_8px_rgba(134,201,154,0.7)]';
+      } else {
+        todayProgressText.textContent = `${completed} / ${total} DONE`;
+        if (todayProgressDot) todayProgressDot.className = 'w-2 h-2 rounded-full bg-[#E5A93C]';
+      }
+    }
+
+    // High-End Tactile Vibration & Acoustic Chime Tick
+    function playHapticTick() {
+      try {
+        if (navigator.vibrate) {
+          navigator.vibrate(18);
+        }
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) {
+          const actx = new AudioCtx();
+          const osc = actx.createOscillator();
+          const gain = actx.createGain();
+          osc.type = 'sine';
+          // Clean acoustic bell/tick sweep from 880Hz (A5) up to 1500Hz
+          osc.frequency.setValueAtTime(880, actx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(1500, actx.currentTime + 0.05);
+          gain.gain.setValueAtTime(0.25, actx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.10);
+          osc.connect(gain);
+          gain.connect(actx.destination);
+          osc.start();
+          osc.stop(actx.currentTime + 0.10);
+        }
+      } catch(e) {}
+    }
+
+    function getTodayDateKey() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function getTodayFormatted(includeYear = false) {
+      const now = new Date();
+      const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+      const monthName = months[now.getMonth()];
+      const day = now.getDate();
+      const year = now.getFullYear();
+      if (includeYear) {
+        return `${monthName} ${day}, ${year}`;
+      }
+      return `${monthName} ${day}`;
+    }
+
+    function saveVaultToStorage() {
+      try {
+        if (!Array.isArray(habits)) habits = [];
+        localStorage.setItem('streakkeeper_habits_vault', JSON.stringify(habits));
+        if (vaultHabitsCount) vaultHabitsCount.textContent = `${habits.length} DISCIPLINES`;
+        updateProfileAnalytics();
+      } catch (e) {
+        console.error('Vault save failed:', e);
+      }
+    }
+
+    function loadVaultFromStorage() {
+      try {
+        const raw = localStorage.getItem('streakkeeper_habits_vault');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          habits = Array.isArray(parsed) ? parsed : [];
+          habits.forEach(h => {
+            if (!h.reflections) h.reflections = {};
+          });
+          completedCount = habits.filter(h => h.completed).length;
+          if (streakCountDisplay) streakCountDisplay.textContent = `${completedCount}`;
+        } else {
+          habits = [];
+        }
+      } catch (e) {
+        console.error('Vault load failed:', e);
+        habits = [];
+      }
+      updateTodayProgressBadge();
+    }
+
+    function updateProfileAnalytics() {
+      // 1. User Name
+      const savedProfile = localStorage.getItem('streakkeeper_user_profile');
+      let uName = 'ALEX';
+      if (savedProfile) {
+        try {
+          const parsed = JSON.parse(savedProfile);
+          if (parsed && parsed.name) uName = parsed.name;
+        } catch (e) {}
+      }
+      if (profileDisplayName) profileDisplayName.textContent = uName.toUpperCase();
+
+      // 2. Metrics Calculation
+      const totalHabits = habits.length;
+      let bestStreak = 0;
+      let totalTicks = 0;
+      habits.forEach(h => {
+        const s = h.streak || (h.completedDays ? h.completedDays.length : 0);
+        if (s > bestStreak) bestStreak = s;
+        if (h.completedDays) totalTicks += h.completedDays.length;
+      });
+
+      // Overall Score across all habits
+      const maxPossibleTicks = Math.max(1, totalHabits * 30);
+      const overallRate = totalHabits > 0 ? Math.min(100, Math.round((totalTicks / maxPossibleTicks) * 100)) : 0;
+
+      // Update text
+      const metricActiveHabits = document.getElementById('metricActiveHabits');
+      const metricBestStreak = document.getElementById('metricBestStreak');
+      const metricTotalCheckins = document.getElementById('metricTotalCheckins');
+      const metricMonthlyRate = document.getElementById('metricMonthlyRate');
+      const radialScoreText = document.getElementById('radialScoreText');
+      const radialProgressCircle = document.getElementById('radialProgressCircle');
+      const consistencyTierBadge = document.getElementById('consistencyTierBadge');
+
+      if (metricActiveHabits) metricActiveHabits.textContent = `${totalHabits}`;
+      if (metricBestStreak) metricBestStreak.textContent = `${bestStreak}`;
+      if (metricTotalCheckins) metricTotalCheckins.textContent = `${totalTicks}`;
+      if (metricMonthlyRate) metricMonthlyRate.textContent = `${overallRate}%`;
+      if (radialScoreText) radialScoreText.textContent = `${overallRate}%`;
+
+      // Animate Radial Arc: circumference = 2 * PI * 40 ≈ 251.2
+      if (radialProgressCircle) {
+        const circ = 251.2;
+        const offset = circ - (circ * (overallRate / 100));
+        radialProgressCircle.style.strokeDashoffset = `${offset}`;
+      }
+
+      // Consistency Tier
+      if (consistencyTierBadge) {
+        if (overallRate >= 80) {
+          consistencyTierBadge.textContent = 'APEX ARCHITECT';
+          consistencyTierBadge.className = 'text-[10px] font-bold text-[#86C99A] uppercase px-2 py-0.5 rounded bg-[#161a17] border border-[#86C99A]/40';
+        } else if (overallRate >= 50) {
+          consistencyTierBadge.textContent = 'STEADY MOMENTUM';
+          consistencyTierBadge.className = 'text-[10px] font-bold text-[#E5B96B] uppercase px-2 py-0.5 rounded bg-[#1f1a12] border border-[#E5B96B]/30';
+        } else if (totalHabits > 0) {
+          consistencyTierBadge.textContent = 'BUILDING HABIT';
+          consistencyTierBadge.className = 'text-[10px] font-bold text-[#F5F5F5] uppercase px-2 py-0.5 rounded bg-[#1B1B1B] border border-[#292929]';
+        } else {
+          consistencyTierBadge.textContent = 'FRESH INITIATION';
+          consistencyTierBadge.className = 'text-[10px] font-bold text-[#737373] uppercase px-2 py-0.5 rounded bg-[#1B1B1B] border border-[#292929]';
+        }
+      }
+
+      // 3. Weekly Day-of-Week Rhythm Breakdown
+      // Nov 2026: Nov 1 = Sun, dayOfWeek idx = (day + 5) % 7
+      const dayCounts = [0, 0, 0, 0, 0, 0, 0]; // Mon, Tue, Wed, Thu, Fri, Sat, Sun
+      habits.forEach(h => {
+        if (h.completedDays) {
+          h.completedDays.forEach(d => {
+            if (d >= 1 && d <= 30) {
+              const dow = (d + 5) % 7;
+              dayCounts[dow] += 1;
+            }
+          });
+        }
+      });
+
+      const maxDayCount = Math.max(1, ...dayCounts);
+      const dayKeys = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      const dayNames = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
+      let maxDayIdx = 4; // default Friday
+      let maxVal = -1;
+
+      dayKeys.forEach((k, idx) => {
+        const valElem = document.getElementById(`val${k}`);
+        const barElem = document.getElementById(`bar${k}`);
+        const cnt = dayCounts[idx];
+        if (valElem) valElem.textContent = `${cnt}`;
+        if (barElem) {
+          const pct = Math.max(8, Math.round((cnt / maxDayCount) * 100));
+          barElem.style.height = `${pct}%`;
+          if (cnt === Math.max(...dayCounts) && cnt > 0) {
+            barElem.className = 'w-full bg-[#86C99A] rounded-t-md shadow-[0_0_8px_rgba(134,201,154,0.6)] transition-all duration-700 ease-out';
+          } else {
+            barElem.className = 'w-full bg-[#353535] group-hover:bg-[#86C99A] rounded-t-md transition-all duration-700 ease-out';
+          }
+        }
+        if (cnt > maxVal) {
+          maxVal = cnt;
+          maxDayIdx = idx;
+        }
+      });
+
+      const peakDayBadge = document.getElementById('peakDayBadge');
+      if (peakDayBadge) {
+        peakDayBadge.textContent = maxVal > 0 ? `PEAK: ${dayNames[maxDayIdx]}` : 'PEAK: IN PROGRESS';
+      }
+
+      // 4. Time-of-Day Distribution Spectrum
+      let morn = 0, noon = 0, evn = 0, night = 0;
+      habits.forEach(h => {
+        const t = (h.timeOfDay || '').toUpperCase();
+        if (t.includes('MORN') || (t.includes('06:') || t.includes('07:') || t.includes('08:') || t.includes('09:') || t.includes('10:') || t.includes('11:'))) {
+          morn++;
+        } else if (t.includes('NOON') || (t.includes('12:') || t.includes('13:') || t.includes('14:') || t.includes('15:') || t.includes('16:'))) {
+          noon++;
+        } else if (t.includes('EVN') || (t.includes('17:') || t.includes('18:') || t.includes('19:') || t.includes('20:'))) {
+          evn++;
+        } else if (t.includes('NIGHT') || (t.includes('21:') || t.includes('22:') || t.includes('23:') || t.includes('00:') || t.includes('01:') || t.includes('02:') || t.includes('03:') || t.includes('04:') || t.includes('05:'))) {
+          night++;
+        } else {
+          morn++;
+        }
+      });
+
+      const totalTimeHabits = Math.max(1, morn + noon + evn + night);
+      const pMorn = Math.round((morn / totalTimeHabits) * 100);
+      const pNoon = Math.round((noon / totalTimeHabits) * 100);
+      const pEvn = Math.round((evn / totalTimeHabits) * 100);
+      const pNight = Math.max(0, 100 - (pMorn + pNoon + pEvn));
+
+      const specMorn = document.getElementById('specMorn');
+      const specNoon = document.getElementById('specNoon');
+      const specEvn = document.getElementById('specEvn');
+      const specNight = document.getElementById('specNight');
+      const countMorn = document.getElementById('countMorn');
+      const countNoon = document.getElementById('countNoon');
+      const countEvn = document.getElementById('countEvn');
+      const countNight = document.getElementById('countNight');
+
+      if (specMorn) specMorn.style.width = `${pMorn}%`;
+      if (specNoon) specNoon.style.width = `${pNoon}%`;
+      if (specEvn) specEvn.style.width = `${pEvn}%`;
+      if (specNight) specNight.style.width = `${pNight}%`;
+
+      if (countMorn) countMorn.textContent = `${morn}`;
+      if (countNoon) countNoon.textContent = `${noon}`;
+      if (countEvn) countEvn.textContent = `${evn}`;
+      if (countNight) countNight.textContent = `${night}`;
+
+      const timeSpectrumDominance = document.getElementById('timeSpectrumDominance');
+      if (timeSpectrumDominance) {
+        if (morn >= Math.max(noon, evn, night) && morn > 0) timeSpectrumDominance.textContent = 'MORNING FOCUSED';
+        else if (noon >= Math.max(morn, evn, night) && noon > 0) timeSpectrumDominance.textContent = 'MID-DAY FOCUSED';
+        else if (evn >= Math.max(morn, noon, night) && evn > 0) timeSpectrumDominance.textContent = 'EVENING FOCUSED';
+        else if (night > 0) timeSpectrumDominance.textContent = 'NIGHT OWL ROUTINE';
+        else timeSpectrumDominance.textContent = 'ALL-DAY FLEXIBLE';
+      }
+
+      // 5. Milestone Badges Unlocking (Habit-Specific Milestones)
+      const habitMilestonesContainer = document.getElementById('habitMilestonesContainer');
+      const unlockedBadgesFraction = document.getElementById('unlockedBadgesFraction');
+      let totalMilestonesEarned = 0;
+
+      if (habitMilestonesContainer) {
+        habitMilestonesContainer.innerHTML = '';
+
+        if (habits.length === 0) {
+          habitMilestonesContainer.innerHTML = `
+            <div class="text-[11px] text-[#737373] italic p-2">
+              Create your first discipline to start earning habit-specific milestone badges.
+            </div>
+          `;
+        } else {
+          habits.forEach(habit => {
+            const hStreak = habit.streak || (habit.completedDays ? habit.completedDays.length : 0);
+            const m7 = hStreak >= 7;
+            const m30 = hStreak >= 30;
+            const m50 = hStreak >= 50;
+            const m70 = hStreak >= 70;
+            const m100 = hStreak >= 100;
+
+            const habitCard = document.createElement('div');
+            habitCard.className = 'p-3 rounded-xl bg-[#101010] border border-[#202020] flex flex-col gap-2.5';
+            habitCard.innerHTML = `
+              <div class="flex items-center justify-between border-b border-[#1C1C1C] pb-1.5">
+                <span class="text-xs font-bold text-[#F5F5F5] uppercase tracking-wide">${habit.title}</span>
+                <span class="text-[9px] font-semibold ${hStreak > 0 ? 'text-[#E5B96B]' : 'text-[#737373]'} uppercase">CURRENT: ${hStreak} DAYS</span>
+              </div>
+              <div class="grid grid-cols-2 gap-1.5">
+                <div class="p-2 rounded-lg ${m7 ? 'bg-[#141D16] border border-[#86C99A]/40' : 'bg-[#161616] border border-[#222222] opacity-50'} flex items-center gap-2">
+                  <span class="text-sm">🔥</span>
+                  <div class="flex flex-col overflow-hidden">
+                    <span class="text-[10px] font-bold ${m7 ? 'text-[#F5F5F5]' : 'text-[#737373]'} uppercase">7D FIRE</span>
+                    <span class="text-[8px] ${m7 ? 'text-[#86C99A] font-bold' : 'text-[#606060]'} truncate">${m7 ? 'UNLOCKED • ' + habit.title : `${hStreak}/7 DAYS`}</span>
+                  </div>
+                </div>
+                <div class="p-2 rounded-lg ${m30 ? 'bg-[#141D16] border border-[#86C99A]/40' : 'bg-[#161616] border border-[#222222] opacity-50'} flex items-center gap-2">
+                  <span class="text-sm">🛡️</span>
+                  <div class="flex flex-col overflow-hidden">
+                    <span class="text-[10px] font-bold ${m30 ? 'text-[#F5F5F5]' : 'text-[#737373]'} uppercase">30D TITAN</span>
+                    <span class="text-[8px] ${m30 ? 'text-[#86C99A] font-bold' : 'text-[#606060]'} truncate">${m30 ? 'UNLOCKED • ' + habit.title : `${hStreak}/30 DAYS`}</span>
+                  </div>
+                </div>
+                <div class="p-2 rounded-lg ${m50 ? 'bg-[#141D16] border border-[#86C99A]/40' : 'bg-[#161616] border border-[#222222] opacity-50'} flex items-center gap-2">
+                  <span class="text-sm">⚡</span>
+                  <div class="flex flex-col overflow-hidden">
+                    <span class="text-[10px] font-bold ${m50 ? 'text-[#F5F5F5]' : 'text-[#737373]'} uppercase">50D RELENTLESS</span>
+                    <span class="text-[8px] ${m50 ? 'text-[#86C99A] font-bold' : 'text-[#606060]'} truncate">${m50 ? 'UNLOCKED • ' + habit.title : `${hStreak}/50 DAYS`}</span>
+                  </div>
+                </div>
+                <div class="p-2 rounded-lg ${m70 ? 'bg-[#141D16] border border-[#86C99A]/40' : 'bg-[#161616] border border-[#222222] opacity-50'} flex items-center gap-2">
+                  <span class="text-sm">⚔️</span>
+                  <div class="flex flex-col overflow-hidden">
+                    <span class="text-[10px] font-bold ${m70 ? 'text-[#F5F5F5]' : 'text-[#737373]'} uppercase">70D CHAMPION</span>
+                    <span class="text-[8px] ${m70 ? 'text-[#86C99A] font-bold' : 'text-[#606060]'} truncate">${m70 ? 'UNLOCKED • ' + habit.title : `${hStreak}/70 DAYS`}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="p-2 rounded-lg ${m100 ? 'bg-[#1D190E] border border-[#E5B96B]/50' : 'bg-[#161616] border border-[#222222] opacity-50'} flex items-center gap-2">
+                <span class="text-sm">👑</span>
+                <div class="flex flex-col overflow-hidden">
+                  <span class="text-[10px] font-bold ${m100 ? 'text-[#E5B96B]' : 'text-[#737373]'} uppercase">100D CENTURY MASTER</span>
+                  <span class="text-[8px] ${m100 ? 'text-[#E5B96B] font-bold' : 'text-[#606060]'} truncate">${m100 ? 'EARNED BY ' + habit.title : `${hStreak}/100 DAYS UNTIL LEGEND`}</span>
+                </div>
+              </div>
+            `;
+            habitMilestonesContainer.appendChild(habitCard);
+
+            if (m7) totalMilestonesEarned++;
+            if (m30) totalMilestonesEarned++;
+            if (m50) totalMilestonesEarned++;
+            if (m70) totalMilestonesEarned++;
+            if (m100) totalMilestonesEarned++;
+          });
+        }
+      }
+
+      if (unlockedBadgesFraction) {
+        unlockedBadgesFraction.textContent = `${totalMilestonesEarned} EARNED`;
+      }
+
+      // 6. Render Active Disciplines in Profile
+      renderProfileHabits();
+    }
+
+    // ==============================================================
+    // PROFILE ACTIVE DISCIPLINES & 12-MONTH YEARLY DOSSIER
+    // ==============================================================
+
+    function renderProfileHabits() {
+      const container = document.getElementById('profileHabitsListContainer');
+      const countBadge = document.getElementById('profileHabitsCountBadge');
+      if (!container) return;
+
+      if (countBadge) {
+        countBadge.textContent = `${habits.length} ${habits.length === 1 ? 'DISCIPLINE' : 'DISCIPLINES'}`;
+      }
+
+      container.innerHTML = '';
+
+      if (habits.length === 0) {
+        container.innerHTML = `
+          <div class="p-4 rounded-xl bg-[#101010] border border-[#222222] text-center flex flex-col items-center gap-1.5 py-6">
+            <span class="text-2xl">🌱</span>
+            <span class="text-[12px] font-bold text-[#F5F5F5] uppercase">No Disciplines Configured</span>
+            <span class="text-[10px] text-[#737373]">Create your first habit from the LIST tab to view its 12-month dossier.</span>
+          </div>
+        `;
+        return;
+      }
+
+      habits.forEach((h) => {
+        const item = document.createElement('div');
+        item.className = 'p-3.5 rounded-xl bg-[#101010] hover:bg-[#161616] border border-[#222222] hover:border-[#86C99A]/40 flex items-center justify-between transition-all duration-200 group cursor-pointer shadow-sm';
+        
+        const streakCount = h.streak || (h.completedDays ? h.completedDays.length : 0);
+        const durationFormatted = h.durationFormatted || (h.durationMinutes ? `${h.durationMinutes} MIN` : '30 MIN');
+        const timeWindow = h.timeOfDay || 'ANYTIME';
+
+        item.innerHTML = `
+          <div class="flex flex-col gap-1">
+            <div class="flex items-center gap-2">
+              <span class="text-[13px] font-bold text-[#F5F5F5] group-hover:text-[#86C99A] uppercase tracking-wide transition-colors">${h.title || 'DISCIPLINE'}</span>
+              <span class="text-[9px] font-bold text-[#86C99A] bg-[#161a17] border border-[#86C99A]/30 px-1.5 py-0.5 rounded uppercase">${durationFormatted}</span>
+            </div>
+            <div class="flex items-center gap-3 text-[10px] text-[#737373]">
+              <span class="flex items-center gap-1">
+                <svg class="w-3 h-3 text-[#E5B96B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                ${timeWindow}
+              </span>
+              <span class="flex items-center gap-1 text-[#E5B96B] font-semibold">
+                🔥 ${streakCount} DAYS
+              </span>
+            </div>
+          </div>
+
+          <button type="button" class="py-1.5 px-3 rounded-lg bg-[#1B1B1B] group-hover:bg-[#86C99A] border border-[#292929] group-hover:border-[#86C99A] text-[#A0A0A0] group-hover:text-[#090909] font-bold text-[10px] uppercase tracking-wider flex items-center gap-1.5 transition-all">
+            <span>12-MO DOSSIER</span>
+            <span>➔</span>
+          </button>
+        `;
+
+        item.addEventListener('click', () => {
+          openYearlyDossierModal(h.id);
+        });
+
+        container.appendChild(item);
+      });
+    }
+
+    function openYearlyDossierModal(habitId) {
+      const habit = habits.find(h => h.id === habitId);
+      if (!habit) return;
+
+      const modal = document.getElementById('yearlyDossierModal');
+      const titleEl = document.getElementById('yearlyDossierTitle');
+      const totalDaysEl = document.getElementById('yearlyTotalDays');
+      const bestStreakEl = document.getElementById('yearlyBestStreak');
+      const frozenCountEl = document.getElementById('yearlyFrozenCount');
+      const consistencyRateEl = document.getElementById('yearlyConsistencyRate');
+      const container = document.getElementById('yearlyMonthsGridContainer');
+
+      if (!modal || !container) return;
+
+      if (titleEl) titleEl.textContent = (habit.title || 'DISCIPLINE').toUpperCase();
+
+      let yearTotalLogged = 0;
+      let yearTotalFrozen = 0;
+      let yearTotalDays = 0;
+
+      container.innerHTML = '';
+
+      // Generate all 12 months for 2026
+      for (let m = 1; m <= 12; m++) {
+        const monthName = monthNames[m - 1];
+        const monthData = getHabitMonthData(habit, 2026, m);
+        const daysInMonth = new Date(2026, m, 0).getDate();
+        yearTotalDays += daysInMonth;
+
+        const firstDay = new Date(2026, m - 1, 1).getDay();
+        const offset = (firstDay + 6) % 7; // Mon=0 .. Sun=6
+
+        const completedCount = monthData.completed.length;
+        yearTotalLogged += completedCount;
+
+        const fulfillmentRate = Math.round((completedCount / daysInMonth) * 100);
+
+        const card = document.createElement('div');
+        card.className = 'bg-[#101010] border border-[#202020] rounded-xl p-2 sm:p-2.5 flex flex-col gap-1.5 hover:border-[#333333] transition-colors';
+
+        // Month Card Header (Compact)
+        const header = document.createElement('div');
+        header.className = 'flex items-center justify-between pb-1 border-b border-[#1C1C1C]';
+        header.innerHTML = `
+          <div class="flex items-center gap-1">
+            <span class="font-bebas text-sm text-[#F5F5F5] tracking-wider uppercase">${monthName.substring(0, 3)}</span>
+            <span class="text-[8px] text-[#737373]">${daysInMonth}d</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="text-[9px] font-bold text-[#86C99A]">${completedCount}/${daysInMonth}</span>
+            <span class="text-[8px] font-bold text-[#737373] bg-[#161616] px-1 py-0.2 rounded border border-[#262626]">${fulfillmentRate}%</span>
+          </div>
+        `;
+        card.appendChild(header);
+
+        // Days of week mini-header
+        const dowRow = document.createElement('div');
+        dowRow.className = 'grid grid-cols-7 gap-0.5 text-center text-[7px] font-bold text-[#555555]';
+        dowRow.innerHTML = '<span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>';
+        card.appendChild(dowRow);
+
+        // Dots Grid (7 cols, compact gap)
+        const dotsGrid = document.createElement('div');
+        dotsGrid.className = 'grid grid-cols-7 gap-0.5 sm:gap-1';
+
+        // Leading blanks
+        for (let p = 0; p < offset; p++) {
+          const blank = document.createElement('div');
+          blank.className = 'w-full aspect-square opacity-0 pointer-events-none';
+          dotsGrid.appendChild(blank);
+        }
+
+        // Days
+        for (let d = 1; d <= daysInMonth; d++) {
+          const isDone = monthData.completed.includes(d);
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = `yearly-dossier-dot w-full aspect-square rounded-[3px] flex items-center justify-center text-[6px] font-bold transition-all cursor-pointer hover:scale-110 active:scale-95 ${
+            isDone
+              ? 'bg-[#86C99A] text-[#090909] shadow-[0_0_3px_rgba(134,201,154,0.4)]'
+              : 'bg-[#181818] border border-[#222222] text-[#404040] hover:border-[#555555]'
+          }`;
+          dot.title = `${monthName} ${d}: ${isDone ? 'Completed' : 'Missed'}`;
+          dot.textContent = `${d}`;
+
+          // Highlight today (Nov 6) with gold accent border
+          if (m === 11 && d === 6) {
+            dot.classList.add('ring-1', 'ring-[#E5B96B]');
+          }
+
+          dot.addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.querySelectorAll('.yearly-dossier-dot').forEach(el => el.classList.remove('ring-2', 'ring-white', 'scale-110'));
+            dot.classList.add('ring-2', 'ring-white', 'scale-110');
+            updateYearlyDayInspector(habit, 2026, m, d, isDone);
+          });
+
+          dotsGrid.appendChild(dot);
+        }
+
+        card.appendChild(dotsGrid);
+        container.appendChild(card);
+      }
+
+      // Update Overall Summary Stats in Modal
+      if (totalDaysEl) totalDaysEl.textContent = `${yearTotalLogged}`;
+      if (frozenCountEl) frozenCountEl.textContent = '0';
+      if (bestStreakEl) bestStreakEl.textContent = `${habit.streak || 0}`;
+      const yearRate = Math.round((yearTotalLogged / Math.max(1, yearTotalDays)) * 100);
+      if (consistencyRateEl) consistencyRateEl.textContent = `${yearRate}%`;
+
+      // Initialize Inspector with today's state (Nov 6, 2026)
+      const novData = getHabitMonthData(habit, 2026, 11);
+      updateYearlyDayInspector(
+        habit, 
+        2026, 
+        11, 
+        6, 
+        novData.completed.includes(6)
+      );
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function updateYearlyDayInspector(habit, year, month, day, isDone) {
+      const dateText = document.getElementById('inspectorDateText');
+      const statusBadge = document.getElementById('inspectorStatusBadge');
+      const noteText = document.getElementById('inspectorNoteText');
+      const dotBadge = document.getElementById('inspectorDotBadge');
+
+      const dateStr = `${monthNames[month - 1].substring(0, 3)} ${day}, ${year}`;
+      if (dateText) dateText.textContent = dateStr;
+
+      const dateKey = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      habit.reflections = habit.reflections || {};
+      const reflection = habit.reflections[dateKey];
+
+      if (isDone) {
+        if (dotBadge) {
+          dotBadge.className = 'w-5 h-5 rounded-[5px] bg-[#86C99A] flex items-center justify-center text-[10px] text-[#090909] font-bold shrink-0';
+          dotBadge.textContent = '✓';
+        }
+        if (statusBadge) {
+          statusBadge.textContent = 'COMPLETED';
+          statusBadge.className = 'text-[9px] font-bold text-[#86C99A] uppercase px-1.5 py-0.2 bg-[#161a17] border border-[#86C99A]/30 rounded';
+        }
+        if (noteText) {
+          if (reflection && reflection.note) {
+            noteText.textContent = `${reflection.mood ? reflection.mood.split(' ')[0] + ' ' : ''}"${reflection.note}"`;
+            noteText.className = 'text-[11px] text-[#E5E5E5] italic truncate max-w-[280px] sm:max-w-md';
+          } else {
+            noteText.textContent = '"Streak completed & verified on schedule."';
+            noteText.className = 'text-[11px] text-[#86C99A]/80 italic truncate max-w-[280px] sm:max-w-md';
+          }
+        }
+      } else {
+        if (dotBadge) {
+          dotBadge.className = 'w-5 h-5 rounded-[5px] bg-[#181818] border border-[#292929] flex items-center justify-center text-[10px] text-[#505050] font-bold shrink-0';
+          dotBadge.textContent = '·';
+        }
+        if (statusBadge) {
+          statusBadge.textContent = 'NOT LOGGED';
+          statusBadge.className = 'text-[9px] font-bold text-[#737373] uppercase px-1.5 py-0.2 bg-[#141414] border border-[#292929] rounded';
+        }
+        if (noteText) {
+          noteText.textContent = '"No session recorded for this day."';
+          noteText.className = 'text-[11px] text-[#737373] italic truncate max-w-[280px] sm:max-w-md';
+        }
+      }
+    }
+
+    function closeYearlyDossierModal() {
+      const modal = document.getElementById('yearlyDossierModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    const closeYearlyDossierBtn = document.getElementById('closeYearlyDossierBtn');
+    const closeYearlyDossierBottomBtn = document.getElementById('closeYearlyDossierBottomBtn');
+    const yearlyDossierModal = document.getElementById('yearlyDossierModal');
+
+    if (closeYearlyDossierBtn) closeYearlyDossierBtn.addEventListener('click', closeYearlyDossierModal);
+    if (closeYearlyDossierBottomBtn) closeYearlyDossierBottomBtn.addEventListener('click', closeYearlyDossierModal);
+    if (yearlyDossierModal) {
+      yearlyDossierModal.addEventListener('click', (e) => {
+        if (e.target === yearlyDossierModal) closeYearlyDossierModal();
+      });
+    }
+
+    // ==============================================================
+    // OFFLINE-FIRST SMART NOTIFICATION ENGINE (100% PRIVATE)
+    // ==============================================================
+    let notificationCheckInterval = null;
+    let pendingToastHabitId = null;
+
+    // ==============================================================
+    // DAILY REFLECTION & SESSION DESCRIPTION MODAL ENGINE
+    // ==============================================================
+    let activeReflectionHabitId = null;
+    let selectedReflectionMood = '';
+
+    const reflectionModal = document.getElementById('reflectionModal');
+    const reflectionHabitTitle = document.getElementById('reflectionHabitTitle');
+    const closeReflectionBtn = document.getElementById('closeReflectionBtn');
+    const reflectionNoteInput = document.getElementById('reflectionNoteInput');
+    const reflectionCharCount = document.getElementById('reflectionCharCount');
+    const saveReflectionBtn = document.getElementById('saveReflectionBtn');
+    const skipReflectionBtn = document.getElementById('skipReflectionBtn');
+
+    function openReflectionModal(habitId) {
+      const habit = habits.find(h => h.id === habitId);
+      if (!habit || !reflectionModal) return;
+
+      activeReflectionHabitId = habitId;
+      if (reflectionHabitTitle) reflectionHabitTitle.textContent = (habit.title || 'HABIT').toUpperCase();
+
+      habit.reflections = habit.reflections || {};
+      const todayKey = getTodayDateKey();
+      const reflectionModalDateBadge = document.getElementById('reflectionDateBadge');
+      if (reflectionModalDateBadge) {
+        reflectionModalDateBadge.textContent = `STREAK LOGGED • ${getTodayFormatted(false)}`;
+      }
+      const todayReflection = (habit.reflections && habit.reflections[todayKey]) ? habit.reflections[todayKey] : { note: '', mood: '' };
+
+      if (reflectionNoteInput) {
+        reflectionNoteInput.value = todayReflection.note || '';
+        if (reflectionCharCount) reflectionCharCount.textContent = `${reflectionNoteInput.value.length}/140`;
+      }
+
+      selectedReflectionMood = todayReflection.mood || '';
+      document.querySelectorAll('#reflectionMoodChips .mood-chip').forEach(chip => {
+        if (chip.getAttribute('data-mood') === selectedReflectionMood) {
+          chip.classList.add('bg-[#86C99A]', 'text-[#090909]', 'border-[#86C99A]');
+          chip.classList.remove('bg-[#1B1B1B]', 'text-[#D4D4D4]', 'border-[#292929]');
+        } else {
+          chip.classList.remove('bg-[#86C99A]', 'text-[#090909]', 'border-[#86C99A]');
+          chip.classList.add('bg-[#1B1B1B]', 'text-[#D4D4D4]', 'border-[#292929]');
+        }
+      });
+
+      reflectionModal.classList.remove('hidden');
+      reflectionModal.classList.add('flex');
+
+      setTimeout(() => {
+        if (reflectionNoteInput) reflectionNoteInput.focus();
+      }, 100);
+    }
+
+    function closeReflectionModal() {
+      if (reflectionModal) {
+        reflectionModal.classList.add('hidden');
+        reflectionModal.classList.remove('flex');
+      }
+      activeReflectionHabitId = null;
+    }
+
+    // Wire reflection mood chips
+    document.querySelectorAll('#reflectionMoodChips .mood-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const mood = chip.getAttribute('data-mood');
+        if (selectedReflectionMood === mood) {
+          selectedReflectionMood = '';
+          chip.classList.remove('bg-[#86C99A]', 'text-[#090909]', 'border-[#86C99A]');
+          chip.classList.add('bg-[#1B1B1B]', 'text-[#D4D4D4]', 'border-[#292929]');
+        } else {
+          selectedReflectionMood = mood;
+          document.querySelectorAll('#reflectionMoodChips .mood-chip').forEach(c => {
+            c.classList.remove('bg-[#86C99A]', 'text-[#090909]', 'border-[#86C99A]');
+            c.classList.add('bg-[#1B1B1B]', 'text-[#D4D4D4]', 'border-[#292929]');
+          });
+          chip.classList.add('bg-[#86C99A]', 'text-[#090909]', 'border-[#86C99A]');
+          chip.classList.remove('bg-[#1B1B1B]', 'text-[#D4D4D4]', 'border-[#292929]');
+        }
+      });
+    });
+
+    if (reflectionNoteInput) {
+      reflectionNoteInput.addEventListener('input', () => {
+        if (reflectionCharCount) reflectionCharCount.textContent = `${reflectionNoteInput.value.length}/140`;
+      });
+    }
+
+    if (saveReflectionBtn) {
+      saveReflectionBtn.addEventListener('click', () => {
+        if (!activeReflectionHabitId) {
+          closeReflectionModal();
+          return;
+        }
+        const habit = habits.find(h => h.id === activeReflectionHabitId);
+        if (habit) {
+          habit.reflections = habit.reflections || {};
+          const noteText = reflectionNoteInput ? reflectionNoteInput.value.trim() : '';
+          const todayKey = getTodayDateKey();
+          habit.reflections[todayKey] = {
+            note: noteText,
+            mood: selectedReflectionMood,
+            timestamp: Date.now()
+          };
+          saveVaultToStorage();
+          renderHabits();
+          renderProfileHabits();
+          if (currentSelectedHabitId === habit.id) {
+            renderGithubGrid(habit);
+          }
+        }
+        closeReflectionModal();
+      });
+    }
+
+    if (skipReflectionBtn) skipReflectionBtn.addEventListener('click', closeReflectionModal);
+    if (closeReflectionBtn) closeReflectionBtn.addEventListener('click', closeReflectionModal);
+    if (reflectionModal) {
+      reflectionModal.addEventListener('click', (e) => {
+        if (e.target === reflectionModal) closeReflectionModal();
+      });
+    }
+
+    function showOfflineToast(habit, customTitle, customMsg) {
+      const toast = document.getElementById('offlineNotificationToast');
+      const titleEl = document.getElementById('toastTitle');
+      const msgEl = document.getElementById('toastMessage');
+      const timeBadge = document.getElementById('toastTimeBadge');
+      if (!toast || !habit) return;
+
+      pendingToastHabitId = habit.id;
+      if (titleEl) titleEl.textContent = customTitle || `Time for ${habit.title}`;
+      if (msgEl) msgEl.textContent = customMsg || `Scheduled window: ${habit.timeOfDay || 'Active Routine'}. Keep your momentum unbroken!`;
+      if (timeBadge) {
+        const now = new Date();
+        timeBadge.textContent = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+      }
+
+      // Also trigger browser system notification if granted
+      if ("Notification" in window && Notification.permission === "granted") {
+        try {
+          new Notification(customTitle || `🔥 StreakKeeper: ${habit.title}`, {
+            body: customMsg || `Scheduled at ${habit.timeOfDay || 'now'}. Keep your momentum strong!`,
+            icon: '/favicon.ico'
+          });
+        } catch(e) {}
+      }
+
+      toast.classList.remove('opacity-0', '-translate-y-4', 'pointer-events-none');
+      toast.classList.add('opacity-100', 'translate-y-0');
+    }
+
+    function hideOfflineToast() {
+      const toast = document.getElementById('offlineNotificationToast');
+      if (toast) {
+        toast.classList.add('opacity-0', '-translate-y-4', 'pointer-events-none');
+        toast.classList.remove('opacity-100', 'translate-y-0');
+      }
+      pendingToastHabitId = null;
+    }
+
+    function initNotificationEngine() {
+      // Request browser notification permission quietly if default
+      if ("Notification" in window && Notification.permission === "default") {
+        Notification.requestPermission().catch(() => {});
+      }
+
+      const toastMarkDoneBtn = document.getElementById('toastMarkDoneBtn');
+      const toastDismissBtn = document.getElementById('toastDismissBtn');
+
+      if (toastDismissBtn) {
+        toastDismissBtn.addEventListener('click', hideOfflineToast);
+      }
+
+      if (toastMarkDoneBtn) {
+        toastMarkDoneBtn.addEventListener('click', () => {
+          if (pendingToastHabitId) {
+            const h = habits.find(habit => habit.id === pendingToastHabitId);
+            if (h) {
+              const today = 6; // Nov 6
+              if (!h.completedDays) h.completedDays = [];
+              if (!h.completedDays.includes(today)) {
+                h.completedDays.push(today);
+                h.completedDays.sort((a,b) => a - b);
+              }
+              h.completed = true;
+              h.streak = h.completedDays.length;
+              saveVaultToStorage();
+              renderHabits();
+              updateProfileAnalytics();
+              if (streakCountDisplay) streakCountDisplay.textContent = `${habits.filter(item => item.completed).length}`;
+            }
+          }
+          hideOfflineToast();
+        });
+      }
+
+      // Periodic offline scheduler check (checks local system time every 60s)
+      if (notificationCheckInterval) clearInterval(notificationCheckInterval);
+      notificationCheckInterval = setInterval(() => {
+        const now = new Date();
+        const currentHours = now.getHours().toString().padStart(2, '0');
+        const currentMins = now.getMinutes().toString().padStart(2, '0');
+        const currentTimeStr = `${currentHours}:${currentMins}`;
+
+        // Check each habit for 5-minute pre-reminder and on-time reminder
+        habits.forEach(h => {
+          if (!h.completed && h.timeOfDay) {
+            const match = h.timeOfDay.match(/^(\d{1,2}):(\d{2})/);
+            if (match) {
+              const hHour = parseInt(match[1], 10);
+              const hMin = parseInt(match[2], 10);
+
+              // 5-minute pre-reminder calculation
+              let preHour = hHour;
+              let preMin = hMin - 5;
+              if (preMin < 0) {
+                preMin += 60;
+                preHour = (preHour - 1 + 24) % 24;
+              }
+              const preTimeStr = `${preHour.toString().padStart(2, '0')}:${preMin.toString().padStart(2, '0')}`;
+              const onTimeStr = `${hHour.toString().padStart(2, '0')}:${hMin.toString().padStart(2, '0')}`;
+
+              if (currentTimeStr === preTimeStr) {
+                showOfflineToast(
+                  h,
+                  `⏰ Upcoming in 5 mins: ${h.title}`,
+                  `Starts at ${onTimeStr}! Prepare now to keep your ${h.streak}-day streak unbroken.`
+                );
+              } else if (currentTimeStr === onTimeStr) {
+                showOfflineToast(
+                  h,
+                  `🔥 Time for ${h.title}`,
+                  `Scheduled window: ${h.timeOfDay}. Complete your routine to advance your streak!`
+                );
+              }
+            }
+          }
+        });
+
+        // Evening streak shield check at 20:00 (8:00 PM)
+        if (currentHours === '20' && currentMins === '00') {
+          const uncompleted = habits.filter(h => !h.completed);
+          if (uncompleted.length > 0) {
+            showOfflineToast(
+              uncompleted[0],
+              '🛡️ Evening Streak Shield',
+              `You have ${uncompleted.length} uncompleted discipline(s) today! Protect your streak before midnight.`
+            );
+          }
+        }
+      }, 60000);
+    }
+
+    let animTime = 0;
+    let animId = null;
+
+    // Scribble Points
+    let scribblePoints = [];
+    let outerFlyaways = [];
+
+    function generateScribbleData(cx, cy, baseRadius) {
+      scribblePoints = [];
+      outerFlyaways = [];
+      let seed = 42;
+      function random() {
+        seed = (seed * 9301 + 49297) % 233280;
+        return seed / 233280;
+      }
+
+      let curAngle = 0;
+      let curR = baseRadius * 0.4;
+      const totalSteps = 420;
+
+      for (let i = 0; i < totalSteps; i++) {
+        curAngle += 0.35 + random() * 0.45;
+        const targetR = (baseRadius * 0.2) + random() * (baseRadius * 0.85);
+        curR += (targetR - curR) * 0.35;
+        const loopAngle = curAngle + (random() - 0.5) * 1.5;
+        const x = cx + Math.cos(loopAngle) * curR;
+        const y = cy + Math.sin(loopAngle) * (curR * 0.94);
+        const cpX = cx + Math.cos(loopAngle + (random() - 0.5) * 1.2) * (curR * (0.8 + random() * 0.5));
+        const cpY = cy + Math.sin(loopAngle + (random() - 0.5) * 1.2) * (curR * (0.8 + random() * 0.5));
+        scribblePoints.push({ x, y, cpX, cpY });
+      }
+
+      for (let j = 0; j < 35; j++) {
+        const startAngle = random() * Math.PI * 2;
+        const startR = baseRadius * (0.7 + random() * 0.25);
+        const peakR = baseRadius * (1.12 + random() * 0.32);
+        const endAngle = startAngle + (random() - 0.5) * 2.2;
+        outerFlyaways.push({
+          x1: cx + Math.cos(startAngle) * startR,
+          y1: cy + Math.sin(startAngle) * startR,
+          cpx1: cx + Math.cos(startAngle + 0.6) * peakR,
+          cpy1: cy + Math.sin(startAngle + 0.6) * peakR,
+          cpx2: cx + Math.cos(endAngle - 0.6) * peakR,
+          cpy2: cy + Math.sin(endAngle - 0.6) * peakR,
+          x2: cx + Math.cos(endAngle) * (startR * 0.9),
+          y2: cy + Math.sin(endAngle) * (startR * 0.9),
+          alpha: 0.35 + random() * 0.45
+        });
+      }
+    }
+
+    // Draw the continuous single-line T-shirt body and kinetic rotating scribble head
+    function drawMindArt() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const w = canvas.width;
+      const h = canvas.height;
+      const cx = w * 0.50;
+      const cy = h * 0.34;
+      const baseRadius = w * 0.24;
+
+      animTime += 0.02;
+
+      // 1. Static T-shirt Torso & Neck
+      ctx.save();
+      ctx.strokeStyle = '#F5F5F5';
+      ctx.lineWidth = 1.8;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      ctx.beginPath();
+      ctx.moveTo(w * 0.38, h * 0.65);
+      ctx.bezierCurveTo(w * 0.44, h * 0.72, w * 0.56, h * 0.72, w * 0.62, h * 0.65);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(w * 0.395, h * 0.665);
+      ctx.bezierCurveTo(w * 0.45, h * 0.735, w * 0.55, h * 0.735, w * 0.605, h * 0.665);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(w * 0.42, h * 0.52);
+      ctx.lineTo(w * 0.42, h * 0.58);
+      ctx.lineTo(w * 0.38, h * 0.65);
+      ctx.moveTo(w * 0.58, h * 0.52);
+      ctx.lineTo(w * 0.58, h * 0.58);
+      ctx.lineTo(w * 0.62, h * 0.65);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(w * 0.38, h * 0.65);
+      ctx.bezierCurveTo(w * 0.30, h * 0.68, w * 0.22, h * 0.74, w * 0.15, h * 0.88);
+      ctx.lineTo(w * 0.165, h * 0.98);
+
+      ctx.moveTo(w * 0.26, h * 0.76);
+      ctx.bezierCurveTo(w * 0.28, h * 0.84, w * 0.29, h * 0.90, w * 0.29, h * 0.98);
+
+      ctx.moveTo(w * 0.62, h * 0.65);
+      ctx.bezierCurveTo(w * 0.70, h * 0.68, w * 0.78, h * 0.74, w * 0.85, h * 0.88);
+      ctx.lineTo(w * 0.835, h * 0.98);
+
+      ctx.moveTo(w * 0.74, h * 0.76);
+      ctx.bezierCurveTo(w * 0.72, h * 0.84, w * 0.71, h * 0.90, w * 0.71, h * 0.98);
+      ctx.stroke();
+      ctx.restore();
+
+      // 2. Kinetic Rotating Scribble Head
+      ctx.save();
+      ctx.translate(cx, cy);
+
+      const swirlAngle = animTime * 0.35;
+      ctx.rotate(swirlAngle);
+
+      if (scribblePoints.length > 0) {
+        ctx.beginPath();
+        const pt0 = scribblePoints[0];
+        ctx.moveTo(pt0.x - cx, pt0.y - cy);
+
+        for (let k = 1; k < scribblePoints.length; k++) {
+          const pt = scribblePoints[k];
+          const wobble = Math.sin(animTime * 2 + k * 0.1) * 0.8;
+          ctx.quadraticCurveTo(
+            (pt.cpX - cx) + wobble,
+            (pt.cpY - cy) - wobble,
+            (pt.x - cx) + wobble,
+            (pt.y - cy) + wobble
+          );
+        }
+        ctx.strokeStyle = 'rgba(245, 245, 245, 0.75)';
+        ctx.lineWidth = 1.25;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+
+        ctx.beginPath();
+        for (let m = 0; m < scribblePoints.length; m += 3) {
+          const pt = scribblePoints[m];
+          const dist = Math.hypot(pt.x - cx, pt.y - cy);
+          if (dist < baseRadius * 0.58) {
+            ctx.lineTo(pt.x - cx, pt.y - cy);
+          }
+        }
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.lineWidth = 1.4;
+        ctx.stroke();
+      }
+
+      ctx.rotate(-swirlAngle * 1.5);
+      outerFlyaways.forEach((f, idx) => {
+        const float = Math.sin(animTime * 1.8 + idx * 0.4) * 1.5;
+        ctx.beginPath();
+        ctx.moveTo(f.x1 - cx, f.y1 - cy);
+        ctx.bezierCurveTo(
+          (f.cpx1 - cx) + float, (f.cpy1 - cy) - float,
+          (f.cpx2 - cx) - float, (f.cpy2 - cy) + float,
+          f.x2 - cx, f.y2 - cy
+        );
+        ctx.strokeStyle = `rgba(245, 245, 245, ${f.alpha})`;
+        ctx.lineWidth = 1.1;
+        ctx.stroke();
+      });
+
+      // 3. Central Golden Clarity Spark
+      ctx.beginPath();
+      ctx.arc(0, 0, 4, 0, Math.PI * 2);
+      ctx.fillStyle = '#E5B96B';
+      ctx.shadowColor = '#E5B96B';
+      ctx.shadowBlur = 10;
+      ctx.fill();
+
+      ctx.restore();
+
+      animId = requestAnimationFrame(drawMindArt);
+    }
+
+    const w = canvas.width;
+    const h = canvas.height;
+    generateScribbleData(w * 0.50, h * 0.34, w * 0.24);
+    drawMindArt();
+
+    // ==============================================================
+    // TRANSITIONS & NAVIGATION
+    // ==============================================================
+
+    // Splash -> Account Setup (User Name & Password Page)
+    makeItBtn.addEventListener('click', () => {
+      const savedProfile = localStorage.getItem('streakkeeper_user_profile');
+      if (savedProfile) {
+        try {
+          const profile = JSON.parse(savedProfile);
+          if (profile) {
+            if (profile.name && userName) userName.value = profile.name;
+            if (profile.password && userPassword) {
+              userPassword.value = profile.password;
+              if (typeof updatePasswordStrength === 'function') updatePasswordStrength(profile.password);
+            }
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      typographyBlock.style.opacity = '0';
+      typographyBlock.style.transform = 'translateY(10px)';
+      splashFooter.style.opacity = '0';
+      splashFooter.style.transform = 'translateY(20px)';
+
+      logoContainer.classList.add('zooming-in');
+
+      setTimeout(() => {
+        splashScreen.style.display = 'none';
+        accountScreen.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+        accountScreen.classList.add('opacity-100', 'translate-y-0');
+        if (userName) userName.focus();
+      }, 550);
+    });
+
+    // Account Setup -> Splash (Back)
+    backToSplashBtn.addEventListener('click', () => {
+      accountScreen.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+      accountScreen.classList.remove('opacity-100', 'translate-y-0');
+
+      setTimeout(() => {
+        splashScreen.style.display = 'flex';
+        logoContainer.classList.remove('zooming-in');
+        logoContainer.style.transform = 'scale(1)';
+        logoContainer.style.opacity = '1';
+        typographyBlock.style.opacity = '1';
+        typographyBlock.style.transform = 'translateY(0)';
+        splashFooter.style.opacity = '1';
+        splashFooter.style.transform = 'translateY(0)';
+      }, 300);
+    });
+
+    // Account Setup -> Home Screen ("CONTINUE TO ROUTINE")
+    continueBtn.addEventListener('click', () => {
+      const enteredName = userName.value.trim() || 'Alex';
+      const enteredPassword = userPassword.value.trim();
+
+      // Persist profile to localStorage immediately
+      const profile = {
+        name: enteredName,
+        password: enteredPassword,
+        onboarded: true
+      };
+      localStorage.setItem('streakkeeper_user_profile', JSON.stringify(profile));
+
+      homeGreeting.textContent = `${enteredName.toUpperCase()}'S ROUTINE`;
+      if (profileDisplayName) profileDisplayName.textContent = enteredName.toUpperCase();
+
+      accountScreen.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
+      accountScreen.classList.remove('opacity-100', 'translate-y-0');
+
+      setTimeout(() => {
+        accountScreen.style.display = 'none';
+        homeScreen.style.display = 'flex';
+        renderHabits();
+        homeScreen.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+        homeScreen.classList.add('opacity-100', 'translate-y-0');
+      }, 350);
+    });
+
+    // Open Add Habit Screen (from Center Plus Button or Top + Button)
+    function openCreateHabitScreen() {
+      createHabitScreen.style.display = 'flex';
+      void createHabitScreen.offsetWidth;
+      createHabitScreen.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+      createHabitScreen.classList.add('opacity-100', 'translate-y-0');
+
+      homeScreen.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
+      homeScreen.classList.remove('opacity-100', 'translate-y-0');
+
+      setTimeout(() => {
+        homeScreen.style.display = 'none';
+        if (habitTitleInput) habitTitleInput.focus();
+      }, 250);
+    }
+
+    centerPlusBtn.addEventListener('click', () => {
+      centerPlusBtn.classList.add('scale-90');
+      setTimeout(() => {
+        centerPlusBtn.classList.remove('scale-90');
+        openCreateHabitScreen();
+      }, 100);
+    });
+
+    addAnotherHabitBtn.addEventListener('click', () => {
+      openCreateHabitScreen();
+    });
+
+    // Add Habit -> Home (Back)
+    backToHomeBtn.addEventListener('click', () => {
+      homeScreen.style.display = 'flex';
+      void homeScreen.offsetWidth;
+      homeScreen.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
+      homeScreen.classList.add('opacity-100', 'translate-y-0');
+
+      createHabitScreen.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+      createHabitScreen.classList.remove('opacity-100', 'translate-y-0');
+
+      setTimeout(() => {
+        createHabitScreen.style.display = 'none';
+      }, 250);
+    });
+
+    // ==============================================================
+    // DURATION & TIME OF DAY CONTROLS
+    // ==============================================================
+
+    function updateDurationDisplay() {
+      if (currentMinutes >= 60) {
+        const hrs = Math.floor(currentMinutes / 60);
+        const mins = currentMinutes % 60;
+        if (mins === 0) {
+          displayDurationValue.textContent = `${hrs}`;
+          displayDurationUnit.textContent = hrs === 1 ? 'HOUR' : 'HOURS';
+          durationSummary.textContent = `${hrs} ${hrs === 1 ? 'HR' : 'HRS'}`;
+        } else {
+          displayDurationValue.textContent = `${hrs}h ${mins}`;
+          displayDurationUnit.textContent = 'MIN';
+          durationSummary.textContent = `${hrs}H ${mins}M`;
+        }
+      } else {
+        displayDurationValue.textContent = `${currentMinutes}`;
+        displayDurationUnit.textContent = 'MINUTES';
+        durationSummary.textContent = `${currentMinutes} MIN`;
+      }
+
+      // Update active preset button highlight
+      presetButtons.forEach(btn => {
+        const m = parseInt(btn.getAttribute('data-minutes'));
+        if (m === currentMinutes) {
+          btn.className = 'duration-preset active-preset py-1.5 rounded-lg bg-[#222222] border border-[#F5F5F5] text-[11px] font-semibold text-[#F5F5F5] transition-colors';
+        } else {
+          btn.className = 'duration-preset py-1.5 rounded-lg bg-[#1B1B1B] border border-[#292929] text-[11px] font-semibold text-[#737373] hover:text-[#F5F5F5] transition-colors';
+        }
+      });
+
+      // Recalculate TO time if FROM time exists
+      if (startTimeInput && startTimeInput.value) {
+        endTimeInput.value = addMinutesToTime(startTimeInput.value, currentMinutes);
+        syncScheduleBadge();
+      }
+    }
+
+    // 24-Hour Schedule helpers
+    function addMinutesToTime(timeStr, minsToAdd) {
+      if (!timeStr) return '';
+      const parts = timeStr.split(':');
+      if (parts.length < 2) return '';
+      const h = parseInt(parts[0], 10);
+      const m = parseInt(parts[1], 10);
+      const totalMins = (h * 60 + m + minsToAdd) % (24 * 60);
+      const endH = String(Math.floor(totalMins / 60)).padStart(2, '0');
+      const endM = String(totalMins % 60).padStart(2, '0');
+      return `${endH}:${endM}`;
+    }
+
+    function syncScheduleBadge() {
+      const s = startTimeInput.value;
+      const e = endTimeInput.value;
+      if (s && e) {
+        windowModeBadge.textContent = `${s} – ${e}`;
+        selectedTimeOfDay = `${s} – ${e}`;
+      } else {
+        windowModeBadge.textContent = 'ANYTIME';
+        selectedTimeOfDay = 'ANYTIME';
+      }
+    }
+
+    startTimeInput.addEventListener('input', () => {
+      endTimeInput.value = addMinutesToTime(startTimeInput.value, currentMinutes);
+      syncScheduleBadge();
+    });
+
+    endTimeInput.addEventListener('input', () => {
+      syncScheduleBadge();
+    });
+
+    decrementDurationBtn.addEventListener('click', () => {
+      if (currentMinutes > 15) {
+        currentMinutes -= 15;
+      } else if (currentMinutes > 5) {
+        currentMinutes = 5;
+      }
+      updateDurationDisplay();
+    });
+
+    incrementDurationBtn.addEventListener('click', () => {
+      if (currentMinutes < 720) { // Max 12 hours
+        currentMinutes += 15;
+      }
+      updateDurationDisplay();
+    });
+
+    presetButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentMinutes = parseInt(btn.getAttribute('data-minutes'));
+        updateDurationDisplay();
+      });
+    });
+
+    segmentButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const preset = btn.getAttribute('data-preset');
+        const start = btn.getAttribute('data-start');
+
+        if (preset === 'ANYTIME') {
+          startTimeInput.value = '';
+          endTimeInput.value = '';
+          syncScheduleBadge();
+        } else if (start) {
+          startTimeInput.value = start;
+          endTimeInput.value = addMinutesToTime(start, currentMinutes);
+          syncScheduleBadge();
+        }
+
+        segmentButtons.forEach(b => {
+          if (b === btn) {
+            b.className = 'time-segment active-segment py-1.5 px-0.5 rounded-lg bg-[#222222] border border-[#F5F5F5] text-center text-[#F5F5F5] text-[10px] font-bold tracking-wider transition-all';
+          } else {
+            b.className = 'time-segment py-1.5 px-0.5 rounded-lg bg-[#1B1B1B] border border-[#292929] text-center text-[#737373] hover:text-[#A0A0A0] text-[10px] font-bold tracking-wider transition-all';
+          }
+        });
+      });
+    });
+
+    // ==============================================================
+    // SAVE HABIT LOGIC & HOME LIST RENDERING
+    // ==============================================================
+
+    function renderHabits() {
+      updateTodayProgressBadge();
+      if (habits.length === 0) {
+        emptyHabitView.style.display = 'flex';
+        habitsListView.classList.add('hidden');
+        habitsListView.classList.remove('flex');
+      } else {
+        emptyHabitView.style.display = 'none';
+        habitsListView.classList.remove('hidden');
+        habitsListView.classList.add('flex');
+
+        habitsContainer.innerHTML = '';
+        habits.forEach((habit, index) => {
+          const card = document.createElement('div');
+          card.className = `w-full bg-[#141414] hover:bg-[#181818] border ${habit.completed ? 'border-[#86C99A]/50 bg-[#161a17]' : 'border-[#292929] hover:border-[#737373]'} rounded-[18px] p-3.5 flex flex-col gap-2 cursor-pointer transition-all duration-200`;
+          
+          habit.reflections = habit.reflections || {};
+          const todayKey = getTodayDateKey();
+          const todayRef = (habit.reflections && habit.reflections[todayKey]) ? habit.reflections[todayKey] : null;
+
+          card.innerHTML = `
+            <div class="w-full flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <button data-index="${index}" class="check-habit-btn w-8 h-8 rounded-xl ${habit.completed ? 'bg-[#86C99A] text-[#090909]' : 'bg-[#1B1B1B] border border-[#292929] text-[#737373] hover:border-[#86C99A] hover:text-[#86C99A]'} flex items-center justify-center transition-all">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                  </svg>
+                </button>
+                <div class="flex flex-col">
+                  <span class="text-[14px] font-semibold ${habit.completed ? 'text-[#86C99A]' : 'text-[#F5F5F5]'} tracking-wide">${habit.title}</span>
+                  <div class="flex items-center gap-2 mt-0.5">
+                    <span class="text-[10px] font-semibold text-[#E5B96B] tracking-wider uppercase">${habit.durationFormatted}</span>
+                    <span class="text-[#505050] text-[8px]">•</span>
+                    <span class="text-[10px] font-semibold text-[#737373] tracking-wider uppercase">${habit.timeOfDay}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="flex items-center gap-1.5 ${habit.streak > 0 ? (habit.completed ? 'bg-[#1D170D] border border-[#E5B96B]/50 shadow-[0_0_12px_rgba(229,185,107,0.25)] flame-pop' : 'bg-[#18130B] border border-[#E5B96B]/30') : 'bg-[#101010] border border-[#202020]'} px-2.5 py-1 rounded-xl transition-all duration-300">
+                  <svg class="w-3.5 h-3.5 ${habit.streak > 0 ? 'text-[#E5B96B] ' + (habit.completed ? 'animate-flame' : '') : 'text-[#444444]'}" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2c-.3 1.5-1.2 2.7-2.2 3.8C8.5 7.1 7.2 8.6 7 10.7c-.3 2.5 1 4.8 3.1 5.8-1-.5-1.7-1.4-1.9-2.5-.2-1.2.3-2.3 1-3.2.2 1.3.8 2.3 1.8 3 .9.7 1.8 1.6 2 2.8.2 1.1-.2 2.2-1 3 2.1-.5 3.8-2 4.4-4 .8-2.6-.2-5.4-2.2-7-1.1-.9-1.9-2-2.2-3.6z"/>
+                  </svg>
+                  <div class="flex items-baseline gap-0.5">
+                    <span class="font-bebas text-lg ${habit.streak > 0 ? (habit.completed ? 'text-[#E5B96B]' : 'text-[#F5F5F5]') : 'text-[#666666]'} leading-none">${habit.streak}</span>
+                    <span class="text-[8px] font-bold ${habit.streak > 0 ? 'text-[#E5B96B]/70' : 'text-[#505050]'}">D</span>
+                  </div>
+                </div>
+                <svg class="w-4 h-4 text-[#505050]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Daily Reflection Preview (Nov 6) -->
+            ${habit.completed && todayRef && todayRef.note ? `
+              <div class="edit-reflection-pill mt-1 ml-11 flex items-center justify-between bg-[#1B1B1B] hover:bg-[#222222] border border-[#292929] hover:border-[#86C99A]/50 px-2.5 py-1.5 rounded-xl text-[11px] transition-colors group cursor-pointer" data-id="${habit.id}">
+                <div class="flex items-center gap-1.5 overflow-hidden">
+                  <span class="text-[11px] shrink-0">${todayRef.mood ? todayRef.mood.split(' ')[0] : '💬'}</span>
+                  <span class="italic text-[#E5E5E5] group-hover:text-white truncate max-w-[190px]">"${todayRef.note}"</span>
+                </div>
+                <span class="text-[9px] font-bold text-[#737373] group-hover:text-[#86C99A] uppercase tracking-wider shrink-0 ml-1">✎ EDIT NOTE</span>
+              </div>
+            ` : habit.completed ? `
+              <div class="add-reflection-btn mt-0.5 ml-11 flex items-center gap-1 text-[10px] font-semibold text-[#86C99A]/80 hover:text-[#86C99A] cursor-pointer transition-colors" data-id="${habit.id}">
+                <span>+ How was your day? (Add 1-line recap)</span>
+              </div>
+            ` : ''}
+          `;
+
+          // Clicking card opens Dedicated Page (unless clicking check button or note)
+          card.addEventListener('click', (e) => {
+            if (e.target.closest('.check-habit-btn') || e.target.closest('.edit-reflection-pill') || e.target.closest('.add-reflection-btn')) return;
+            openDedicatedHabitScreen(habit.id);
+          });
+
+          habitsContainer.appendChild(card);
+        });
+
+        // Wire edit & add reflection pills
+        document.querySelectorAll('.edit-reflection-pill, .add-reflection-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const habitId = btn.getAttribute('data-id');
+            openReflectionModal(habitId);
+          });
+        });
+
+        // Wire check buttons
+        document.querySelectorAll('.check-habit-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            playHapticTick();
+            const idx = parseInt(btn.getAttribute('data-index'));
+            habits[idx].completed = !habits[idx].completed;
+            if (!habits[idx].completedDays) habits[idx].completedDays = [];
+            
+            const today = new Date().getDate();
+            if (habits[idx].completed) {
+              if (!habits[idx].completedDays.includes(today)) {
+                habits[idx].completedDays.push(today);
+                habits[idx].completedDays.sort((a, b) => a - b);
+              }
+              habits[idx].streak = habits[idx].completedDays.length;
+              completedCount += 1;
+              streakCountDisplay.textContent = `${completedCount}`;
+              saveVaultToStorage();
+              renderHabits();
+              updateProfileAnalytics();
+              // Smoothly trigger reflection bottom prompt
+              openReflectionModal(habits[idx].id);
+            } else {
+              habits[idx].completedDays = habits[idx].completedDays.filter(d => d !== today);
+              habits[idx].streak = Math.max(0, habits[idx].completedDays.length);
+              completedCount = Math.max(0, completedCount - 1);
+              streakCountDisplay.textContent = `${completedCount}`;
+              saveVaultToStorage();
+              renderHabits();
+              updateProfileAnalytics();
+            }
+          });
+        });
+      }
+    }
+
+    // ==============================================================
+    // DEDICATED HABIT PAGE & GITHUB CONTRIBUTION GRID
+    // ==============================================================
+
+    function getMonthKey(year, month) {
+      return `${year}-${String(month).padStart(2, '0')}`;
+    }
+
+    function getHabitMonthData(habit, year, month) {
+      if (!habit.monthlyLogs) habit.monthlyLogs = {};
+      const key = getMonthKey(year, month);
+      if (!habit.monthlyLogs[key]) {
+        // If November 2026 and legacy completedDays exists, populate it
+        if (year === 2026 && month === 11 && habit.completedDays) {
+          habit.monthlyLogs[key] = {
+            completed: [...(habit.completedDays || [])],
+            frozen: [...(habit.frozenDays || [])]
+          };
+        } else {
+          habit.monthlyLogs[key] = { completed: [], frozen: [] };
+        }
+      }
+      if (!habit.monthlyLogs[key].completed) habit.monthlyLogs[key].completed = [];
+      if (!habit.monthlyLogs[key].frozen) habit.monthlyLogs[key].frozen = [];
+      return habit.monthlyLogs[key];
+    }
+
+    function openDedicatedHabitScreen(habitId) {
+      currentSelectedHabitId = habitId;
+      const habit = habits.find(h => h.id === habitId);
+      if (!habit) return;
+
+      currentGridYear = 2026;
+      currentGridMonth = 11; // Default to current month
+
+      dedicatedHabitTitle.textContent = habit.title;
+      dedicatedScheduleBadge.textContent = habit.timeOfDay;
+      dedicatedDurationPill.textContent = `${habit.durationFormatted.toUpperCase()} DURATION`;
+
+      renderGithubGrid(habit);
+
+      homeScreen.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
+      homeScreen.classList.remove('opacity-100', 'translate-y-0');
+
+      setTimeout(() => {
+        homeScreen.style.display = 'none';
+        habitDedicatedScreen.style.display = 'flex';
+        habitDedicatedScreen.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+        habitDedicatedScreen.classList.add('opacity-100', 'translate-y-0');
+      }, 300);
+    }
+
+    // Month Navigation Listeners
+    if (prevMonthBtn) {
+      prevMonthBtn.addEventListener('click', () => {
+        currentGridMonth--;
+        if (currentGridMonth < 1) {
+          currentGridMonth = 12;
+          currentGridYear--;
+        }
+        const habit = habits.find(h => h.id === currentSelectedHabitId);
+        if (habit) renderGithubGrid(habit);
+      });
+    }
+
+    if (nextMonthBtn) {
+      nextMonthBtn.addEventListener('click', () => {
+        currentGridMonth++;
+        if (currentGridMonth > 12) {
+          currentGridMonth = 1;
+          currentGridYear++;
+        }
+        const habit = habits.find(h => h.id === currentSelectedHabitId);
+        if (habit) renderGithubGrid(habit);
+      });
+    }
+
+    function renderGithubGrid(habit) {
+      if (!habit.completedDays) habit.completedDays = [];
+      const monthData = getHabitMonthData(habit, currentGridYear, currentGridMonth);
+
+      githubDaysGrid.innerHTML = '';
+      const monthName = monthNames[currentGridMonth - 1];
+      if (dedicatedMonthName) dedicatedMonthName.textContent = `${monthName} ${currentGridYear}`;
+
+      // Dynamic first day offset: Monday=0, Tuesday=1 ... Sunday=6
+      const firstDay = new Date(currentGridYear, currentGridMonth - 1, 1).getDay();
+      const offset = (firstDay + 6) % 7;
+      const totalDays = new Date(currentGridYear, currentGridMonth, 0).getDate();
+
+      // Render leading blank slots
+      for (let pad = 0; pad < offset; pad++) {
+        const blank = document.createElement('div');
+        blank.className = 'aspect-square opacity-0 pointer-events-none';
+        githubDaysGrid.appendChild(blank);
+      }
+
+      // Render days of the month
+      for (let day = 1; day <= totalDays; day++) {
+        const isDone = monthData.completed.includes(day);
+        const dayBtn = document.createElement('button');
+        dayBtn.type = 'button';
+        dayBtn.setAttribute('data-day', day);
+
+        if (isDone) {
+          dayBtn.className = 'aspect-square rounded-[8px] bg-[#86C99A] border border-[#86C99A] text-[#090909] font-bold text-[11px] flex items-center justify-center shadow-[0_0_8px_rgba(134,201,154,0.6)] active:scale-90 transition-all cursor-pointer';
+          dayBtn.textContent = `${day}`;
+          dayBtn.title = `Day ${day} Completed`;
+        } else {
+          dayBtn.className = 'aspect-square rounded-[8px] bg-[#1B1B1B] hover:bg-[#252525] border border-[#292929] hover:border-[#737373] text-[#737373] hover:text-[#F5F5F5] font-semibold text-[11px] flex items-center justify-center active:scale-90 transition-all cursor-pointer';
+          dayBtn.textContent = `${day}`;
+          dayBtn.title = `Day ${day} Pending (Click to toggle)`;
+        }
+
+        // Binary Click Cycle: Empty <-> Completed
+        dayBtn.addEventListener('click', () => {
+          playHapticTick();
+          const wasDone = monthData.completed.includes(day);
+
+          if (!wasDone) {
+            monthData.completed.push(day);
+            monthData.completed.sort((a, b) => a - b);
+          } else {
+            monthData.completed = monthData.completed.filter(d => d !== day);
+          }
+
+          // If current month (Nov 2026), keep top-level habit fields synced
+          if (currentGridYear === 2026 && currentGridMonth === 11) {
+            habit.completedDays = [...monthData.completed];
+            habit.completed = habit.completedDays.includes(6);
+          }
+
+          // Calculate streak: unbroken backwards chain from current reference day
+          let unbrokenChain = 0;
+          const refDay = (currentGridYear === 2026 && currentGridMonth === 11) ? 6 : totalDays;
+          for (let d = refDay; d >= 1; d--) {
+            if (monthData.completed.includes(d)) {
+              unbrokenChain++;
+            } else {
+              break;
+            }
+          }
+          habit.streak = unbrokenChain;
+
+          saveVaultToStorage();
+          renderGithubGrid(habit);
+          renderHabits();
+          updateTodayProgressBadge();
+          if (streakCountDisplay) streakCountDisplay.textContent = `${habits.filter(h => h.completed).length}`;
+        });
+
+        githubDaysGrid.appendChild(dayBtn);
+      }
+
+      // Update dedicated metrics for this month
+      const filledCount = monthData.completed.length;
+      const rate = Math.round((filledCount / totalDays) * 100);
+      dedicatedStreakValue.textContent = `${habit.streak || filledCount}`;
+      dedicatedCompletionRate.textContent = `${rate}%`;
+      dedicatedCompletedFraction.textContent = `${filledCount}/${totalDays}`;
+
+      // Update Bento Card 4: Daily Session Note (Dynamic Today)
+      const dedicatedMoodBadge = document.getElementById('dedicatedMoodBadge');
+      const dedicatedNoteDate = document.getElementById('dedicatedNoteDate');
+      const dedicatedNoteText = document.getElementById('dedicatedNoteText');
+      const dedicatedEditNoteBtn = document.getElementById('dedicatedEditNoteBtn');
+      const dedicatedSessionLogHeaderDate = document.getElementById('dedicatedSessionLogHeaderDate');
+      const dedicatedReflectionContainer = document.getElementById('dedicatedReflectionContainer');
+
+      const todayKey = getTodayDateKey();
+      if (dedicatedSessionLogHeaderDate) {
+        dedicatedSessionLogHeaderDate.textContent = `DAILY SESSION LOG • ${getTodayFormatted(false)}`;
+      }
+
+      habit.reflections = habit.reflections || {};
+      const ref = (habit.reflections && habit.reflections[todayKey]) ? habit.reflections[todayKey] : null;
+      if (ref && ref.note) {
+        if (dedicatedMoodBadge) {
+          dedicatedMoodBadge.textContent = ref.mood || '✓ Logged';
+          dedicatedMoodBadge.style.display = 'inline-block';
+        }
+        if (dedicatedNoteDate) dedicatedNoteDate.textContent = getTodayFormatted(true);
+        if (dedicatedNoteText) dedicatedNoteText.textContent = `"${ref.note}"`;
+      } else {
+        if (dedicatedMoodBadge) dedicatedMoodBadge.style.display = 'none';
+        if (dedicatedNoteDate) dedicatedNoteDate.textContent = getTodayFormatted(true);
+        if (dedicatedNoteText) dedicatedNoteText.textContent = 'No reflection note logged yet. Tap anywhere here to add how your session went!';
+      }
+
+      if (dedicatedEditNoteBtn) {
+        dedicatedEditNoteBtn.onclick = (e) => {
+          e.stopPropagation();
+          openReflectionModal(habit.id);
+        };
+      }
+      if (dedicatedReflectionContainer) {
+        dedicatedReflectionContainer.onclick = () => {
+          openReflectionModal(habit.id);
+        };
+      }
+    }
+
+    backFromDedicatedBtn.addEventListener('click', () => {
+      habitDedicatedScreen.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+      habitDedicatedScreen.classList.remove('opacity-100', 'translate-y-0');
+
+      setTimeout(() => {
+        habitDedicatedScreen.style.display = 'none';
+        homeScreen.style.display = 'flex';
+        renderHabits();
+        homeScreen.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
+        homeScreen.classList.add('opacity-100', 'translate-y-0');
+      }, 300);
+    });
+
+    deleteHabitBtn.addEventListener('click', () => {
+      if (!currentSelectedHabitId) return;
+      habits = habits.filter(h => h.id !== currentSelectedHabitId);
+      saveVaultToStorage();
+      backFromDedicatedBtn.click();
+    });
+
+    saveHabitBtn.addEventListener('click', () => {
+      const title = habitTitleInput.value.trim();
+      if (!title) {
+        habitTitleInput.focus();
+        habitTitleInput.classList.add('border-[#E47777]');
+        setTimeout(() => habitTitleInput.classList.remove('border-[#E47777]'), 1500);
+        return;
+      }
+
+      let durationText = '';
+      if (currentMinutes >= 60) {
+        const hrs = Math.floor(currentMinutes / 60);
+        const mins = currentMinutes % 60;
+        durationText = mins > 0 ? `${hrs}h ${mins}m` : `${hrs} hr${hrs > 1 ? 's' : ''}`;
+      } else {
+        durationText = `${currentMinutes} min`;
+      }
+
+      habits.push({
+        id: Date.now().toString(),
+        title: title,
+        durationMinutes: currentMinutes,
+        durationFormatted: durationText,
+        timeOfDay: selectedTimeOfDay,
+        streak: 1,
+        completed: true,
+        completedDays: [6] // start with today checked
+      });
+
+      completedCount += 1;
+      streakCountDisplay.textContent = `${completedCount}`;
+      saveVaultToStorage();
+
+      // Clear input
+      habitTitleInput.value = '';
+
+      // Animate back to Home Screen
+      createHabitScreen.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
+      createHabitScreen.classList.remove('opacity-100', 'translate-y-0');
+
+      setTimeout(() => {
+        createHabitScreen.style.display = 'none';
+        homeScreen.style.display = 'flex';
+        renderHabits();
+        homeScreen.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
+        homeScreen.classList.add('opacity-100', 'translate-y-0');
+      }, 300);
+    });
+
+    // Bottom Navigation switching between LIST and PROFILE
+    const profileViewContainer = document.getElementById('profileViewContainer');
+    const exportVaultBtn = document.getElementById('exportVaultBtn');
+    const importVaultBtn = document.getElementById('importVaultBtn');
+    const importFileInput = document.getElementById('importFileInput');
+    const homeSubHeader = document.getElementById('homeSubHeader');
+    const privateProfileBadge = document.getElementById('privateProfileBadge');
+
+    function getActiveUserName() {
+      const savedProfile = localStorage.getItem('streakkeeper_user_profile');
+      if (savedProfile) {
+        try {
+          const p = JSON.parse(savedProfile);
+          if (p && p.name) return p.name.toUpperCase();
+        } catch (e) {}
+      }
+      return 'VIKAS';
+    }
+
+    tabList.addEventListener('click', () => {
+      tabList.classList.add('text-[#F5F5F5]');
+      tabList.classList.remove('text-[#737373]');
+      tabList.querySelector('span').classList.add('text-[#F5F5F5]');
+      tabList.querySelector('span').classList.remove('text-[#737373]');
+
+      tabProfile.classList.remove('text-[#F5F5F5]');
+      tabProfile.classList.add('text-[#737373]');
+      tabProfile.querySelector('span').classList.remove('text-[#F5F5F5]');
+      tabProfile.querySelector('span').classList.add('text-[#737373]');
+
+      // Switch top header back to ROUTINE
+      const uName = getActiveUserName();
+      if (homeSubHeader) homeSubHeader.textContent = 'DAILY CONSISTENCY';
+      if (homeGreeting) homeGreeting.textContent = `${uName}'S ROUTINE`;
+      if (todayProgressBadge) todayProgressBadge.style.display = 'flex';
+      if (privateProfileBadge) {
+        privateProfileBadge.classList.add('hidden');
+        privateProfileBadge.classList.remove('flex');
+      }
+
+      // Switch view
+      profileViewContainer.classList.add('hidden');
+      profileViewContainer.classList.remove('flex');
+      renderHabits();
+    });
+
+    tabProfile.addEventListener('click', () => {
+      tabProfile.classList.add('text-[#F5F5F5]');
+      tabProfile.classList.remove('text-[#737373]');
+      tabProfile.querySelector('span').classList.add('text-[#F5F5F5]');
+      tabProfile.querySelector('span').classList.remove('text-[#737373]');
+
+      tabList.classList.remove('text-[#F5F5F5]');
+      tabList.classList.add('text-[#737373]');
+      tabList.querySelector('span').classList.remove('text-[#F5F5F5]');
+      tabList.querySelector('span').classList.add('text-[#737373]');
+
+      // Switch top header to PROFILE
+      const uName = getActiveUserName();
+      if (homeSubHeader) homeSubHeader.textContent = 'DISCIPLINE DOSSIER';
+      if (homeGreeting) homeGreeting.textContent = `${uName}'S PROFILE`;
+      if (todayProgressBadge) todayProgressBadge.style.display = 'none';
+      if (privateProfileBadge) {
+        privateProfileBadge.classList.remove('hidden');
+        privateProfileBadge.classList.add('flex');
+      }
+
+      // Switch view to Profile / Offline Storage Vault
+      emptyHabitView.style.display = 'none';
+      habitsListView.classList.add('hidden');
+      habitsListView.classList.remove('flex');
+
+      profileViewContainer.classList.remove('hidden');
+      profileViewContainer.classList.add('flex');
+      profileViewContainer.scrollTop = 0; // Always start at the top so Hero card is 100% visible
+      if (vaultHabitsCount) vaultHabitsCount.textContent = `${habits.length} DISCIPLINES`;
+      updateProfileAnalytics();
+    });
+
+    // Vault Export & Restore handlers
+    exportVaultBtn.addEventListener('click', () => {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(habits, null, 2));
+      const dlAnchor = document.createElement('a');
+      dlAnchor.setAttribute("href", dataStr);
+      dlAnchor.setAttribute("download", `streakkeeper_backup_${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(dlAnchor);
+      dlAnchor.click();
+      dlAnchor.remove();
+    });
+
+    importVaultBtn.addEventListener('click', () => {
+      importFileInput.click();
+    });
+
+    importFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const imported = JSON.parse(event.target.result);
+          if (Array.isArray(imported)) {
+            habits = imported;
+            saveVaultToStorage();
+            alert(`Vault successfully restored! Loaded ${habits.length} disciplines.`);
+            tabList.click();
+          }
+        } catch (err) {
+          alert('Invalid backup JSON file.');
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    // Toggle Password Visibility
+    let isPasswordVisible = false;
+    togglePasswordBtn.addEventListener('click', () => {
+      isPasswordVisible = !isPasswordVisible;
+      userPassword.type = isPasswordVisible ? 'text' : 'password';
+      eyeIcon.innerHTML = isPasswordVisible 
+        ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"/>'
+        : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>';
+    });
+
+    // Minimalist Swiss Password Strength Calculator
+    userPassword.addEventListener('input', (e) => {
+      const val = e.target.value;
+      const len = val.length;
+
+      [bar1, bar2, bar3, bar4].forEach(b => {
+        b.style.backgroundColor = '#292929';
+      });
+
+      if (len === 0) {
+        strengthLabel.textContent = 'Minimum 6 characters';
+        strengthLabel.style.color = '#737373';
+      } else if (len < 6) {
+        bar1.style.backgroundColor = '#E47777';
+        strengthLabel.textContent = 'Too short';
+        strengthLabel.style.color = '#E47777';
+      } else if (len < 9) {
+        bar1.style.backgroundColor = '#E5B96B';
+        bar2.style.backgroundColor = '#E5B96B';
+        strengthLabel.textContent = 'Medium strength';
+        strengthLabel.style.color = '#E5B96B';
+      } else {
+        bar1.style.backgroundColor = '#86C99A';
+        bar2.style.backgroundColor = '#86C99A';
+        bar3.style.backgroundColor = '#86C99A';
+        bar4.style.backgroundColor = '#86C99A';
+        strengthLabel.textContent = 'Strong passcode';
+        strengthLabel.style.color = '#86C99A';
+      }
+    });
+
+    // Reset Profile / Log out
+    if (resetProfileBtn) {
+      resetProfileBtn.addEventListener('click', () => {
+        if (confirm('Log out and return to welcome screen? (Your saved habits will stay in local storage)')) {
+          localStorage.removeItem('streakkeeper_user_profile');
+          location.reload();
+        }
+      });
+    }
+
+    // App Initialization: Check if user is already onboarded
+    function initApp() {
+      loadVaultFromStorage();
+
+      const profileRaw = localStorage.getItem('streakkeeper_user_profile');
+      if (profileRaw) {
+        try {
+          const profile = JSON.parse(profileRaw);
+          if (profile && profile.onboarded) {
+            const name = profile.name || 'Alex';
+            if (homeSubHeader) homeSubHeader.textContent = 'DAILY CONSISTENCY';
+            homeGreeting.textContent = `${name.toUpperCase()}'S ROUTINE`;
+            if (todayProgressBadge) todayProgressBadge.style.display = 'flex';
+            if (privateProfileBadge) {
+              privateProfileBadge.classList.add('hidden');
+              privateProfileBadge.classList.remove('flex');
+            }
+            if (profileDisplayName) profileDisplayName.textContent = name.toUpperCase();
+
+            // Skip splash & setup completely on page refresh!
+            splashScreen.style.display = 'none';
+            splashScreen.classList.add('opacity-0', 'pointer-events-none');
+
+            accountScreen.style.display = 'none';
+            accountScreen.classList.add('opacity-0', 'pointer-events-none');
+
+            homeScreen.style.display = 'flex';
+            homeScreen.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4', '-translate-y-4');
+            homeScreen.classList.add('opacity-100', 'translate-y-0');
+
+            renderHabits();
+            updateProfileAnalytics();
+            initNotificationEngine();
+            return;
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      // First time user: show splash screen
+      splashScreen.style.display = 'flex';
+      renderHabits();
+      updateProfileAnalytics();
+      initNotificationEngine();
+    }
+
+    // Initialize application on load
+    initApp();
+  </script>
+</body>
+</html>

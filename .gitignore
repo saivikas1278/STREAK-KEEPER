@@ -1,0 +1,23 @@
+# Gradle & Build caches
+.gradle/
+build/
+app/build/
+out/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Android Studio & IDE
+*.iml
+.idea/
+local.properties
+.DS_Store
+Thumbs.db
+
+# Security & Keystores
+*.jks
+*.keystore
+
+# Binary Outputs (Keep repo lightweight)
+*.apk
+*.aab
